@@ -1,0 +1,63 @@
+/* Estilos generales */
+
+/*Clari: Utilicé esta utl para importar más fuentes de letra*/
+@import url('https://fonts.googleapis.com/css2?family=Lora:wght@700&display=swap');
+
+body {
+    background-color: #f8f9fa;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+header {
+    flex-shrink: 0;
+}
+
+header h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    font-family: 'Lora', serif; /* Fuente elegante para el header */
+    color: #333;
+    text-align: center;
+    margin: 0;
+    padding: 10px 0;
+    background-color: #9fcdfa;
+}
+
+main {
+    flex: 1;
+}
+
+footer {
+    flex-shrink: 0;
+    background-color: #9fcdfa;
+    text-align: center;
+    padding: 10px 0;
+}
+
+footer p {
+    font-size: 0.9rem;
+    margin: 0;
+}
+nav .nav-link {
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    transition: color 0.3s ease;
+}
+
+nav .nav-link:hover {
+    color: #d1ecf1; /* Cambia el color al pasar el mouse */
+}
+
+nav .nav-link.active {
+    text-decoration: underline;
+}
+.hospital-img {
+    max-width: 100%; 
+    max-height: 300px; 
+    object-fit: cover;
+}
