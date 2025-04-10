@@ -61,3 +61,7 @@ nav .nav-link.active {
     max-height: 300px; 
     object-fit: cover;
 }
+
+.peque{
+    width: 40px;
+}
