@@ -1,13 +1,13 @@
 const doctores = [
-    { img: "img/juan.jpg", title: 'Dr. Juan Pérez', desc: "Anestesiólogo", disponible:"img/disp.jpeg"},
-    { img: "img/desiree.jpeg", title: 'Dra. Desiree García', desc: "Cardióloga", disponible:"img/no disp.jpeg"},
-    { img: "img/samuel.jpeg", title: 'Dr. Samuel', desc: "Pediatra", disponible:"img/no disp.jpeg"},
-    { img: "img/paola.jpeg", title: 'Dra. Paola Vives', desc: "Cirujana", disponible:"img/disp.jpeg"},
-    { img: "img/ester.jpeg", title: 'Dra. Ester Segura', desc: "Neuróloga", disponible:"img/disp.jpeg"},
-    { img: "img/maria.jpeg", title: 'Dra. María Consuelo', desc: "Ortopédica", disponible:"img/no disp.jpeg"},
-    { img: "img/pascual.jpeg", title: 'Dr. Pascual Matas', desc: "Cardiólogo", disponible:"img/no disp.jpeg"},
-    { img: "img/jorge.jpeg", title: 'Dr. Jorge Palacios', desc: "Urológo", disponible:"img/disp.jpeg"},
-    { img: "img/jesus.jpeg", title: 'Dr. Jesus Paz', desc: "Psquiatra", disponible:"img/disp.jpeg"}
+    { img: "img/admin/juan.jpg", title: 'Dr. Juan Pérez', desc: "Anestesiólogo"},
+    { img: "img/admin/desiree.jpeg", title: 'Dra. Desiree García', desc: "Cardióloga",},
+    { img: "img/admin/samuel.jpeg", title: 'Dr. Samuel', desc: "Pediatra", },
+    { img: "img/admin/paola.jpeg", title: 'Dra. Paola Vives', desc: "Cirujana",},
+    { img: "img/admin/ester.jpeg", title: 'Dra. Ester Segura', desc: "Neuróloga", },
+    { img: "img/admin/maria.jpeg", title: 'Dra. María Consuelo', desc: "Ortopédica", },
+    { img: "img/admin/pascual.jpeg", title: 'Dr. Pascual Matas', desc: "Cardiólogo", },
+    { img: "img/admin/jorge.jpeg", title: 'Dr. Jorge Palacios', desc: "Urológo", },
+    { img: "img/admin/jesus.jpeg", title: 'Dr. Jesus Paz', desc: "Psquiatra", }
   ];
   
   const container = document.getElementById("doctor-list");
@@ -21,7 +21,7 @@ const doctores = [
         <div class="card-body">
           <h5 class="card-title">${d.title}</h5>
           <p>${d.desc}</p>
-          <img src="${d.disponible}" class="position-absolute bottom-0 end-0 peque"></img>
+          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Ver más</button>
         </div>
       </div>
     `;
