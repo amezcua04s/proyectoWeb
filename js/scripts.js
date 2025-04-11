@@ -2,14 +2,23 @@
 function goToInicio(ventana){
 
     let URL= window.location.href;
+    let correo = document.getElementById("usuario").value;
 
-    if(URL){
+    if(!usuario){
+        if(URL){
 
+            URL = URL.split("/").slice(0, -1).join("/");
+            URL = URL + "/"+ventana+".html";
+            window.open(URL, "_self");
+        
+        }
+    } else {
+        ventana = "citasProgramadas";
         URL = URL.split("/").slice(0, -1).join("/");
         URL = URL + "/"+ventana+".html";
         window.open(URL, "_self");
-    
     }
+
 
 }
 
