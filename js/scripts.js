@@ -1,3 +1,18 @@
+/**FUNCIONES PARA NAVEGAR */
+function goToInicio(ventana){
+
+    let URL= window.location.href;
+
+    if(URL){
+
+        URL = URL.split("/").slice(0, -1).join("/");
+        URL = URL + "/"+ventana+".html";
+        window.open(URL, "_self");
+    
+    }
+
+}
+
 const doctores = [
     {
         nombre: "Dra. Laura Díaz",
@@ -117,3 +132,4 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+

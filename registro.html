@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iniciar sesión Hospital Johnson</title>
+    <title>Registrarse en Hospital Johnson</title>
     <link rel="icon" href="img/principal/hospital-logo.jpeg" type="image/x-icon">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -29,7 +29,7 @@
                                 <a class="btn custom-btn w-100" href="index.html#especialidades">Especialidades</a>
                             </li>
                             <li class="nav-item w-100 my-1">
-                                <a class="btn custom-btn w-100" href="#crear">Crear Cuenta</a>
+                                <a class="btn custom-btn w-100" href="inicio.html">Iniciar Sesión</a>
                             </li>
                         </ul>
                         
@@ -53,25 +53,66 @@
             </div>
         </section> 
 
-        <!-- Formulario de inicio de sesión -->
+        <!-- registro de un nuevo usuario -->
         <section class="mt-5">
-            <div class="card mx-auto shadow" style="max-width: 400px;">
+            <div class="card mx-auto shadow" style="max-width: 700px;">
                 <div class="card-body">
-                    <h4 class="card-title text-center mb-4">Iniciar Sesión</h4>
+                    <h4 class="card-title text-center mb-4">Registrar usuario</h4>
                     <form action="#" method="post">
-                        <div class="mb-3">
-                            <label for="usuario" class="form-label">Usuario/Correo Electrónico</label>
-                            <input type="text" id="usuario" name="usuario" class="form-control" placeholder="Ingrese su usuario o correo">
+                       
+                        <div class="row mb-3" id="datosGenerales">
+                            <div class="col-12 mb-3">
+                                <small for="correo" class="form-label">Nombre(s)</small>
+                                <input type="text" id="correo" name="correo" class="form-control" placeholder="Nombre(s)">
+                            </div>
+                            <div class="col-6 mb-3">
+                                <small for="correo" class="form-label">Apellido Paterno</small>
+                                <input type="text" id="correo" name="correo" class="form-control" placeholder="Apellido Paterno">
+                            </div>
+                            <div class="col-6 mb-3">
+                                <small for="correo" class="form-label">Apellido Materno</small>
+                                <input type="text" id="correo" name="correo" class="form-control" placeholder="Apellido Materno">
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Contraseña</label>
-                            <input type="password" id="password" name="password" class="form-control" placeholder="Ingrese su contraseña">
+
+                        <div class="row mb-3" id="infoEspecial">
+                            <div class="col-md-6 mb-3">
+                                <small for="nacimiento" class="form-label">Fecha de Nacimiento</small>
+                                <input type="date" id="nacimiento" name="nacimiento" class="form-control" placeholder="Fecha de Nacimiento">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <small for="genero" class="form-label">Seleccione su sexo</small>
+                                <select id="genero" class="form-select shadow-sm">
+                                    <option value="sexo" disabled selected>Seleccione su sexo</option>
+                                    <option value="hombre">Hombre</option>
+                                    <option value="mujer">Mujer</option>
+                                    <option value="noEspecificado">Prefiero no decirlo</option>
+                                </select>
+                            </div>
                         </div>
-                        <div class="form-check mb-3">
-                            <input type="checkbox" id="recordar" name="recordar" class="form-check-input">
-                            <label for="recordar" class="form-check-label">Recordar Usuario</label>
+                       
+                        <div class="row" id="correos"> 
+                            <div class="col-12 col-md-6 mb-3">
+                                <small for="correo" class="form-label">Correo Electrónico</small>
+                                <input type="text" id="correo" name="correo" class="form-control" placeholder="Ingrese correo">
+                            </div>
+                            <div class="col-12 col-md-6 mb-3">
+                                <small for="confirmar" class="form-label">Confirme</small>
+                                <input type="text" id="confirmar" name="confirmar" class="form-control" placeholder="Repita su correo">
+                            </div>
                         </div>
-                        <button type="button" class="btn btn-primary w-100" onclick="goToInicio('index')">Iniciar Sesión</button>
+
+                        <div class="row" id="passwords">
+                            <div class="col-6 mb-3">
+                                <label for="password" class="form-label">Contraseña</label>
+                                <input type="password" id="password" name="password" class="form-control" placeholder="Contraseña">
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label for="passCon" class="form-label">Confirme</label>
+                                <input type="password" id="passCon" name="passCon" class="form-control" placeholder="Repita contraseña">
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-primary w-100" onclick="goToInicio('index')">Continuar</button>
                     </form>
                 </div>
             </div>
@@ -122,7 +163,5 @@
         </div>
     </footer>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
