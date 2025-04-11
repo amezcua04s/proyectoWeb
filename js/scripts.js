@@ -2,9 +2,10 @@
 function goToInicio(ventana){
 
     let URL= window.location.href;
-    let correo = document.getElementById("usuario").value;
+    let usuario = document.getElementById("usuario").value;
+    console.log("usuario:" + usuario);
 
-    if(!usuario){
+   if(usuario == ""){
         if(URL){
 
             URL = URL.split("/").slice(0, -1).join("/");
@@ -12,7 +13,7 @@ function goToInicio(ventana){
             window.open(URL, "_self");
         
         }
-    } else {
+    } else{
         ventana = "citasProgramadas";
         URL = URL.split("/").slice(0, -1).join("/");
         URL = URL + "/"+ventana+".html";
