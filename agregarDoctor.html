@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Doctor | Hospital Johnson</title>
+    <link rel="icon" href="img/principal/hospital-logo.jpeg" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-light">
+    <header> 
+        <nav class="navbar navbar-expand-lg barra-navegacion">
+            <div class="container d-flex align-items-center">
+                <img src="img/principal/hospital-logo.jpeg" alt="Hospital Johnson Logo" class="me-3" style="height: 80px;">
+                <h1 class="mb-0 mx-auto">Agregar Nuevo Doctor</h1>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container py-4">
+        <div class="mb-4 text-center">
+            <h2>Complete el formulario</h2>
+            <p class="text-muted">Todos los campos marcados con * son obligatorios</p>
+        </div>
+
+        <div class="card mx-auto shadow" style="max-width: 800px;">
+            <div class="card-body">
+                <form id="formDoctor">
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <small class="form-label">Nombre(s)*</small>
+                            <input type="text" class="form-control" id="nombre" required>
+                        </div>
+                        <div class="col-md-4">
+                            <small class="form-label">Apellido Paterno*</small>
+                            <input type="text" class="form-control" id="apellidoPaterno" required>
+                        </div>
+                        <div class="col-md-4">
+                            <small class="form-label">Apellido Materno</small>
+                            <input type="text" class="form-control" id="apellidoMaterno">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <small class="form-label">Especialidad*</small>
+                        <select id="especialidad" class="form-select shadow-sm" required>
+                            <option value="" disabled selected>Seleccione...</option>
+                            <option value="Anestesiólogo">Anestesiólogo</option>
+                            <option value="Cardiólogo">Cardiólogo</option>
+                            <option value="Pediatra">Pediatra</option>
+                            <option value="Cirujano">Cirujano</option>
+                            <option value="Neurólogo">Neurólogo</option>
+                            <option value="Ortopédico">Ortopédico</option>
+                            <option value="Urólogo">Urólogo</option>
+                            <option value="Psiquiatra">Psiquiatra</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <small class="form-label">Disponibilidad*</small>
+                        <select id="disponibilidad" class="form-select w-auto" required>
+                            <option value="" disabled selected>Seleccione...</option>
+                            <option value="Lunes a Viernes (8:00 AM - 6:00 PM)">Lunes a Viernes (8:00 AM - 6:00 PM)</option>
+                            <option value="Turnos rotativos">Turnos rotativos</option>
+                            <option value="Fines de semana">Fines de semana</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <small class="form-label">Horario detallado*</small>
+                        <textarea class="form-control" id="horario" rows="2" required
+                            placeholder="Ej: Lunes a Viernes de 7:00 AM a 3:00 PM, Sábados de 9:00 AM a 1:00 PM"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 py-2">Guardar doctor</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer class="mt-5">
+        <div class="footer">
+            <div class="row text-center text">
+                <div class="col-md-4 mb-3">
+                    <h5>Síguenos</h5>
+                    <a href="https://facebook.com" target="_blank" class="d-block">
+                        <i class="bi bi-facebook"></i> Facebook
+                    </a>
+                    <a href="https://instagram.com" target="_blank" class="d-block">
+                        <i class="bi bi-instagram"></i> Instagram
+                    </a>
+                    <a href="https://twitter.com" target="_blank" class="d-block">
+                        <i class="bi bi-twitter"></i> Twitter
+                    </a>
+                </div>
+    
+                <div class="col-md-4 mb-3">
+                    <h5>Dirección</h5>
+                    <p>
+                        Puente de Piedra 150<br>
+                        Col. Toriello Guerra<br>
+                        Tlalpan, CDMX
+                    </p>
+                </div>
+    
+                <div class="col-md-4 mb-3" id="contacto">
+                    <h5>Contacto</h5>
+                    <p>Teléfono: +52 55 1234 5678</p>
+                    <p>Email: contacto@hospitaljohnson.com</p>
+                </div>
+            </div>
+    
+            <div class="row mt-4">
+                <div class="col text-center">
+                    <p>&copy; 2025 Hospital Johnson. Todos los derechos reservados.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('formDoctor').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const nuevoDoctor = {
+                img: "img/doctores/placeholder.jpg",
+                title: `Dr. ${document.getElementById('nombre').value} ${document.getElementById('apellidoPaterno').value}`,
+                desc: document.getElementById('especialidad').value,
+                nombre: document.getElementById('nombre').value,
+                apellidos: `${document.getElementById('apellidoPaterno').value} ${document.getElementById('apellidoMaterno').value}`,
+                especialidad: document.getElementById('especialidad').value,
+                disponibilidad: document.getElementById('disponibilidad').value,
+                horario: document.getElementById('horario').value
+            };
+
+            alert(`Doctor ${nuevoDoctor.title} agregado correctamente`);
+            document.getElementById('formDoctor').reset();
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
