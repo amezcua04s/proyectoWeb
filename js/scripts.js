@@ -143,3 +143,35 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+const registerUser = (event) => {
+    event.preventDefault(); // Evita que la página se recargue
+
+    // Captura los valores de los campos del formulario
+    const user = {
+        nombre: document.getElementById('nombre').value,
+        apellidoPaterno: document.getElementById('apellidoPaterno').value,
+        apellidoMaterno: document.getElementById('apellidoMaterno').value,
+        nacimiento: document.getElementById('nacimiento').value,
+        genero: document.getElementById('genero').value,
+        correo: document.getElementById('correo').value,
+        confirmarCorreo: document.getElementById('confirmar').value,
+        password: document.getElementById('password').value,
+        confirmarPassword: document.getElementById('passCon').value,
+    };
+
+    // Valida los datos antes de guardar
+    if (user.correo !== user.confirmarCorreo) {
+        alert('Los correos no coinciden.');
+        return;
+    }
+
+    if (user.password !== user.confirmarPassword) {
+        alert('Las contraseñas no coinciden.');
+        return;
+    }
+
+    // Guarda el usuario en localStorage
+    saveUser(user);
+
+    alert('Usted se ha registrado correctamente.');
+};

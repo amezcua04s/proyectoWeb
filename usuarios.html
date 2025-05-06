@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuarios Registrados</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="js/nuevosUsuarios.js"></script>
+</head>
+<body>
+    <main class="container my-5">
+        <h1 class="text-center">Usuarios Registrados</h1>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Apellido Paterno</th>
+                    <th>Apellido Materno</th>
+                    <th>Correo</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="userTable"></tbody>
+        </table>
+    </main>
+    <script>
+        const users = getUsers();
+        const userTable = document.getElementById('userTable');
+
+        // Renderiza la tabla con los usuarios
+        users.forEach((user, index) => {
+            const row = `<tr>
+                <td>${user.nombre}</td>
+                <td>${user.apellidoPaterno}</td>
+                <td>${user.apellidoMaterno}</td>
+                <td>${user.correo}</td>
+                <td>
+                    <button class="btn btn-warning btn-sm me-2" onclick="editUser(${index})">Editar</button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteUser(${index})">Eliminar</button>
+                </td>
+            </tr>`;
+            userTable.innerHTML += row;
+        });
+
+        // Función para eliminar un usuario
+        const deleteUser = (index) => {
+            if (confirm('¿Estás seguro de que deseas eliminar este usuario?')) {
+                let users = getUsers();
+                users.splice(index, 1); // Elimina el usuario del arreglo
+                localStorage.setItem('usuarios', JSON.stringify(users)); // Actualiza localStorage
+                location.reload(); // Recarga la página para reflejar los cambios
+            }
+        };
+
+        // Función para editar un usuario
+        const editUser = (index) => {
+            let users = getUsers();
+            const user = users[index];
+            const newName = prompt('Editar Nombre:', user.nombre);
+            const newApellidoPaterno = prompt('Editar Apellido Paterno:', user.apellidoPaterno);
+            const newApellidoMaterno = prompt('Editar Apellido Materno:', user.apellidoMaterno);
+            const newCorreo = prompt('Editar Correo:', user.correo);
+
+            if (newName && newApellidoPaterno && newApellidoMaterno && newCorreo) {
+                users[index] = {
+                    ...user,
+                    nombre: newName,
+                    apellidoPaterno: newApellidoPaterno,
+                    apellidoMaterno: newApellidoMaterno,
+                    correo: newCorreo,
+                };
+                localStorage.setItem('usuarios', JSON.stringify(users)); // Actualiza localStorage
+                location.reload(); // Recarga la página para reflejar los cambios
+            }
+        };
+    </script>
+</body>
+</html>
