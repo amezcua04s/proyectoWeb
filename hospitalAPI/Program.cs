@@ -1,9 +1,7 @@
-using Microsoft.EntityFrameworkCore;
-using hospitalAPI.Data;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configuración de CORS
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 builder.Services.AddCors(options =>
 {
@@ -16,23 +14,18 @@ builder.Services.AddCors(options =>
         });
 });
 
-// Configuración de la base de datos
-builder.Services.AddDbContext<ClinicaDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("ClinicaDb")));
-
-// Configuración de MVC
 builder.Services.AddControllersWithViews();
 
-// Configuración de autenticación (si es necesaria)
-builder.Services.AddAuthentication(options =>
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
 {
-    options.DefaultScheme = "Cookies";
-    options.DefaultChallengeScheme = "Cookies";
-}).AddCookie("Cookies");
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 var app = builder.Build();
 
-// Configuración del pipeline HTTP
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -44,10 +37,12 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseCors(MyAllowSpecificOrigins);
+
+app.UseSession();
+
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Configuración de rutas
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

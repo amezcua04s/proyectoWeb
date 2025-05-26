@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 
 namespace hospitalAPI.Controllers
 {
@@ -6,10 +7,11 @@ namespace hospitalAPI.Controllers
     {
         public IActionResult Index()
         {
+            ViewBag.IsLoggedIn = HttpContext.Session.GetString("UserName") != null;
             return View();
         }
 
-        public IActionResult Especialidades()
+        public IActionResult Privacy()
         {
             return View();
         }

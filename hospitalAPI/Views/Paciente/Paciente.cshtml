@@ -1,0 +1,89 @@
+﻿@{
+    ViewData["Title"] = "Directorio Médico | Hospital Johnson";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container py-4">
+    <h1 class="text-center text-primary mb-4">Directorio de Especialistas</h1>
+</div>
+
+<main class="container my-5">
+    <div class="row mb-4">
+        <div class="col-md-6 mx-auto">
+            <select id="filtroEspecialidad" class="form-select shadow-sm">
+                <option value="todas" selected>Todas las especialidades</option>
+                <option value="Anestesiólogo">Anestesiólogo</option>
+                <option value="Cardiólogo">Cardiólogo</option>
+                <option value="Pediatra">Pediatra</option>
+                <option value="Cirujano">Cirujano</option>
+                <option value="Neurólogo">Neurólogo</option>
+                <option value="Ortopédico">Ortopédico</option>
+                <option value="Urólogo">Urólogo</option>
+                <option value="Psiquiatra">Psiquiatra</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4" id="catalogoDoctores">
+    </div>
+</main>
+
+@section Scripts {
+    <script src="~/js/scripts.js" asp-append-version="true"></script>
+    <script>
+        const doctoresData = [
+            { nombre: "Dr. Juan Pérez", especialidad: "Cardiólogo", descripcion: "Experiencia en enfermedades del corazón y cirugía cardiovascular.", imagenUrl: "/img/doctores/cardiologo.jpg", horario: "L-V: 09:00 - 17:00", telefono: "55-1111-2222", correo: "juan.perez@hospital.com" },
+            { nombre: "Dra. Ana García", especialidad: "Pediatra", descripcion: "Especialista en el cuidado de niños y adolescentes.", imagenUrl: "/img/doctores/pediatra.jpg", horario: "L-S: 10:00 - 18:00", telefono: "55-3333-4444", correo: "ana.garcia@hospital.com" },
+            { nombre: "Dr. Carlos Ruiz", especialidad: "Anestesiólogo", descripcion: "Control del dolor durante procedimientos quirúrgicos.", imagenUrl: "/img/doctores/anestesiologo.jpg", horario: "L-V: 08:00 - 16:00", telefono: "55-5555-6666", correo: "carlos.ruiz@hospital.com" },
+            { nombre: "Dra. Laura Soto", especialidad: "Neurólogo", descripcion: "Diagnóstico y tratamiento de trastornos del sistema nervioso.", imagenUrl: "/img/doctores/neurologo.jpg", horario: "M-J: 09:30 - 17:30", telefono: "55-7777-8888", correo: "laura.soto@hospital.com" },
+            { nombre: "Dr. Roberto Casas", especialidad: "Cirujano", descripcion: "Realización de procedimientos quirúrgicos complejos.", imagenUrl: "/img/doctores/cirujano.jpg", horario: "L-V: 07:00 - 15:00", telefono: "55-9999-0000", correo: "roberto.casas@hospital.com" },
+            { nombre: "Dra. Sofía Mora", especialidad: "Ortopédico", descripcion: "Especialista en lesiones musculoesqueléticas y huesos.", imagenUrl: "/img/doctores/ortopedico.jpg", horario: "L-S: 11:00 - 19:00", telefono: "55-1234-5678", correo: "sofia.mora@hospital.com" },
+            { nombre: "Dr. Miguel Estrada", especialidad: "Urólogo", descripcion: "Enfermedades del sistema urinario y reproductor masculino.", imagenUrl: "/img/doctores/urologo.jpg", horario: "M-V: 08:30 - 16:30", telefono: "55-2345-6789", correo: "miguel.estrada@hospital.com" },
+            { nombre: "Dra. Valeria Blanco", especialidad: "Psiquiatra", descripcion: "Salud mental y trastornos emocionales.", imagenUrl: "/img/doctores/psiquiatra.jpg", horario: "L-J: 10:00 - 17:00", telefono: "55-3456-7890", correo: "valeria.blanco@hospital.com" },
+            { nombre: "Dr. Ricardo Salas", especialidad: "Cardiólogo", descripcion: "Subespecialista en arritmias cardíacas.", imagenUrl: "/img/doctores/cardiologo.jpg", horario: "L-V: 09:00 - 17:00", telefono: "55-4567-8901", correo: "ricardo.salas@hospital.com" },
+            { nombre: "Dra. Emilia Ramos", especialidad: "Pediatra", descripcion: "Enfoque en desarrollo infantil y vacunas.", imagenUrl: "/img/doctores/pediatra.jpg", horario: "L-S: 10:00 - 18:00", telefono: "55-5678-9012", correo: "emilia.ramos@hospital.com" }
+        ];
+
+        function cargarDoctores(filtro = 'todas') {
+            const catalogo = document.getElementById('catalogoDoctores');
+            catalogo.innerHTML = '';
+
+            const doctoresFiltrados = filtro === 'todas'
+                ? doctoresData
+                : doctoresData.filter(doc => doc.especialidad === filtro);
+
+            if (doctoresFiltrados.length === 0) {
+                catalogo.innerHTML = '<div class="col-12 text-center text-muted">No se encontraron doctores para esta especialidad.</div>';
+                return;
+            }
+
+            doctoresFiltrados.forEach(doctor => {
+                const colDiv = document.createElement('div');
+                colDiv.className = 'col';
+                colDiv.innerHTML = `
+                    <div class="card h-100 shadow-sm doctor-card">
+                        ${doctor.imagenUrl ? `<img src="${doctor.imagenUrl}" class="card-img-top" alt="Foto de ${doctor.nombre}">` : ''}
+                        <div class="card-body">
+                            <h5 class="card-title">${doctor.nombre}</h5>
+                            <p class="card-text text-muted">${doctor.especialidad}</p>
+                            <p class="card-text">${doctor.descripcion}</p>
+                            <div class="info-adicional">
+                                ${doctor.horario ? `<p><i class="bi bi-clock"></i> Horario: ${doctor.horario}</p>` : ''}
+                                ${doctor.telefono ? `<p><i class="bi bi-telephone"></i> Teléfono: ${doctor.telefono}</p>` : ''}
+                                ${doctor.correo ? `<p><i class="bi bi-envelope"></i> Correo: ${doctor.correo}</p>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                catalogo.appendChild(colDiv);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            cargarDoctores();
+            document.getElementById('filtroEspecialidad').addEventListener('change', (e) => {
+                cargarDoctores(e.target.value);
+            });
+        });
+    </script>
+}

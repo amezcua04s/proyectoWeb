@@ -1,0 +1,87 @@
+﻿@{
+    ViewData["Title"] = "Agregar Doctor | Hospital Johnson"; // Título específico para esta página
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Indica que use tu _Layout.cshtml
+}
+
+<main class="container py-4">
+    <div class="mb-4 text-center">
+        <h2>Complete el formulario</h2>
+        <p class="text-muted">Todos los campos marcados con * son obligatorios</p>
+    </div>
+
+    <div class="card mx-auto shadow" style="max-width: 800px;">
+        <div class="card-body">
+            <form id="formDoctor">
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <small class="form-label">Nombre(s)*</small>
+                        <input type="text" class="form-control" id="nombre" required>
+                    </div>
+                    <div class="col-md-4">
+                        <small class="form-label">Apellido Paterno*</small>
+                        <input type="text" class="form-control" id="apellidoPaterno" required>
+                    </div>
+                    <div class="col-md-4">
+                        <small class="form-label">Apellido Materno</small>
+                        <input type="text" class="form-control" id="apellidoMaterno">
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <small class="form-label">Especialidad*</small>
+                    <select id="especialidad" class="form-select shadow-sm" required>
+                        <option value="" disabled selected>Seleccione...</option>
+                        <option value="Anestesiólogo">Anestesiólogo</option>
+                        <option value="Cardiólogo">Cardiólogo</option>
+                        <option value="Pediatra">Pediatra</option>
+                        <option value="Cirujano">Cirujano</option>
+                        <option value="Neurólogo">Neurólogo</option>
+                        <option value="Ortopédico">Ortopédico</option>
+                        <option value="Urólogo">Urólogo</option>
+                        <option value="Psiquiatra">Psiquiatra</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <small class="form-label">Disponibilidad*</small>
+                    <select id="disponibilidad" class="form-select w-auto" required>
+                        <option value="" disabled selected>Seleccione...</option>
+                        <option value="Lunes a Viernes (8:00 AM - 6:00 PM)">Lunes a Viernes (8:00 AM - 6:00 PM)</option>
+                        <option value="Turnos rotativos">Turnos rotativos</option>
+                        <option value="Fines de semana">Fines de semana</option>
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <small class="form-label">Horario detallado*</small>
+                    <textarea class="form-control" id="horario" rows="2" required
+                              placeholder="Ej: Lunes a Viernes de 7:00 AM a 3:00 PM, Sábados de 9:00 AM a 1:00 PM"></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 py-2">Guardar doctor</button>
+            </form>
+        </div>
+    </div>
+</main>
+
+@section Scripts {
+    <script>
+        document.getElementById('formDoctor').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const nuevoDoctor = {
+                img: "~/img/doctores/placeholder.jpg", // Asegúrate de que esta imagen exista en wwwroot/img/doctores
+                title: `Dr. ${document.getElementById('nombre').value} ${document.getElementById('apellidoPaterno').value}`,
+                desc: document.getElementById('especialidad').value,
+                nombre: document.getElementById('nombre').value,
+                apellidos: `${document.getElementById('apellidoPaterno').value} ${document.getElementById('apellidoMaterno').value}`,
+                especialidad: document.getElementById('especialidad').value,
+                disponibilidad: document.getElementById('disponibilidad').value,
+                horario: document.getElementById('horario').value
+            };
+
+            alert(`Doctor ${nuevoDoctor.title} agregado correctamente`);
+            document.getElementById('formDoctor').reset();
+        });
+    </script>
+}

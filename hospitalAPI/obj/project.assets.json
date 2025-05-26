@@ -7677,23 +7677,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\bbjoe\\.nuget\\packages\\": {},
+    "C:\\Users\\cente\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\proyectoWeb\\hospitalAPI\\hospitalAPI.csproj",
+      "projectUniqueName": "C:\\Users\\cente\\Downloads\\proyectoWeb\\hospitalAPI\\hospitalAPI.csproj",
       "projectName": "hospitalAPI",
-      "projectPath": "E:\\proyectoWeb\\hospitalAPI\\hospitalAPI.csproj",
-      "packagesPath": "C:\\Users\\bbjoe\\.nuget\\packages\\",
-      "outputPath": "E:\\proyectoWeb\\hospitalAPI\\obj\\",
+      "projectPath": "C:\\Users\\cente\\Downloads\\proyectoWeb\\hospitalAPI\\hospitalAPI.csproj",
+      "packagesPath": "C:\\Users\\cente\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\cente\\Downloads\\proyectoWeb\\hospitalAPI\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\bbjoe\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\cente\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],

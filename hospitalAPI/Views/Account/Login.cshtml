@@ -9,6 +9,30 @@
         <div class="card mx-auto shadow" style="max-width: 400px;">
             <div class="card-body">
                 <h4 class="card-title text-center mb-4">Iniciar Sesión</h4>
+
+                @* Bloque para mostrar mensajes de éxito (verde) *@
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        @TempData["SuccessMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+
+                @* Bloque para mostrar mensajes de error (rojo) *@
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        @foreach (var modelError in Html.ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                        {
+                            <span>@modelError.ErrorMessage</span>
+                    
+                            <br />
+                        }
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+
                 <form asp-action="Login" asp-controller="Account" method="post">
                     <div class="mb-3">
                         <label for="usuario" class="form-label">Usuario/Correo Electrónico</label>
@@ -24,6 +48,10 @@
                     </div>
                     <button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button>
                 </form>
+                <div class="text-center mt-3">
+                    <p>¿No tienes una cuenta? <a asp-controller="Account" asp-action="Register">Regístrate aquí</a>.</p>
+                    <p><a href="#">¿Olvidaste tu contraseña?</a></p>
+                </div>
             </div>
         </div>
     </section>

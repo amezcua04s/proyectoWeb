@@ -1,3 +1,5 @@
+wwwroot\css\doctor.css
+wwwroot\css\styles.css
 wwwroot\img\admin\desiree.jpeg
 wwwroot\img\admin\disp.jpeg
 wwwroot\img\admin\ester.jpeg
@@ -25,11 +27,9 @@ wwwroot\img\principal\hospital.png
 wwwroot\img\principal\imagen3.jpg
 wwwroot\img\principal\imagen4.jpg
 wwwroot\img\principal\imagen5.jpg
-wwwroot\css\styles.css
 wwwroot\js\doctores.js
 wwwroot\js\scripts.js
-wwwroot\css\doctor.css
-E:\proyectoWeb\hospitalAPI\wwwroot\css\styles.css
-E:\proyectoWeb\hospitalAPI\wwwroot\js\scripts.js
-E:\proyectoWeb\hospitalAPI\wwwroot\js\doctores.js
-E:\proyectoWeb\hospitalAPI\wwwroot\css\doctor.css
+C:\Users\cente\Downloads\proyectoWeb\hospitalAPI\wwwroot\js\scripts.js
+C:\Users\cente\Downloads\proyectoWeb\hospitalAPI\wwwroot\js\doctores.js
+C:\Users\cente\Downloads\proyectoWeb\hospitalAPI\wwwroot\css\styles.css
+C:\Users\cente\Downloads\proyectoWeb\hospitalAPI\wwwroot\css\doctor.css
