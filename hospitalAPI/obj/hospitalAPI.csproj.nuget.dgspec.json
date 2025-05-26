@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\santi\\Desktop\\hospitalAPI\\hospitalAPI.csproj": {}
+    "E:\\proyectoWeb\\hospitalAPI\\hospitalAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\santi\\Desktop\\hospitalAPI\\hospitalAPI.csproj": {
+    "E:\\proyectoWeb\\hospitalAPI\\hospitalAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\santi\\Desktop\\hospitalAPI\\hospitalAPI.csproj",
+        "projectUniqueName": "E:\\proyectoWeb\\hospitalAPI\\hospitalAPI.csproj",
         "projectName": "hospitalAPI",
-        "projectPath": "C:\\Users\\santi\\Desktop\\hospitalAPI\\hospitalAPI.csproj",
-        "packagesPath": "C:\\Users\\santi\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\santi\\Desktop\\hospitalAPI\\obj\\",
+        "projectPath": "E:\\proyectoWeb\\hospitalAPI\\hospitalAPI.csproj",
+        "packagesPath": "C:\\Users\\bbjoe\\.nuget\\packages\\",
+        "outputPath": "E:\\proyectoWeb\\hospitalAPI\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\santi\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\bbjoe\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -44,7 +44,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.200"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net9.0": {
@@ -81,6 +81,10 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[9.0.4, )"
+            },
+            "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
+              "target": "Package",
+              "version": "[9.0.0, )"
             }
           },
           "imports": [
@@ -102,7 +106,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.201/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.300/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

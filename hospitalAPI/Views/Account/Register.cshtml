@@ -1,0 +1,67 @@
+﻿@{
+    ViewData["Title"] = "Registrarse en Hospital Johnson";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="mb-0 text-center">Control de Citas Hospital Johnson</h1>
+<main class="container my-5">
+    <section class="mt-5">
+        <div class="card mx-auto shadow" style="max-width: 700px;">
+            <div class="card-body">
+                <h4 class="card-title text-center mb-4">Registrar usuario</h4>
+                <form asp-action="Register" asp-controller="Account" method="post">
+                    <div class="row mb-3" id="datosGenerales">
+                        <div class="col-12 mb-3">
+                            <small class="form-label">Nombre(s)</small>
+                            <input type="text" name="nombre" class="form-control" placeholder="Nombre(s)">
+                        </div>
+                        <div class="col-6 mb-3">
+                            <small class="form-label">Apellido Paterno</small>
+                            <input type="text" name="paterno" class="form-control" placeholder="Apellido Paterno">
+                        </div>
+                        <div class="col-6 mb-3">
+                            <small class="form-label">Apellido Materno</small>
+                            <input type="text" name="materno" class="form-control" placeholder="Apellido Materno">
+                        </div>
+                    </div>
+                    <div class="row mb-3" id="infoEspecial">
+                        <div class="col-md-6 mb-3">
+                            <small class="form-label">Fecha de Nacimiento</small>
+                            <input type="date" name="nacimiento" class="form-control" placeholder="Fecha de Nacimiento">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <small class="form-label">Seleccione su sexo</small>
+                            <select name="genero" class="form-select shadow-sm">
+                                <option value="" disabled selected>Seleccione su sexo</option>
+                                <option value="hombre">Hombre</option>
+                                <option value="mujer">Mujer</option>
+                                <option value="noEspecificado">Prefiero no decirlo</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row" id="correos">
+                        <div class="col-12 col-md-6 mb-3">
+                            <small class="form-label">Correo Electrónico</small>
+                            <input type="text" name="correo" class="form-control" placeholder="Ingrese correo">
+                        </div>
+                        <div class="col-12 col-md-6 mb-3">
+                            <small class="form-label">Confirme</small>
+                            <input type="text" name="confirmar" class="form-control" placeholder="Repita su correo">
+                        </div>
+                    </div>
+                    <div class="row" id="passwords">
+                        <div class="col-6 mb-3">
+                            <label class="form-label">Contraseña</label>
+                            <input type="password" name="password" class="form-control" placeholder="Contraseña">
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label class="form-label">Confirme</label>
+                            <input type="password" name="passCon" class="form-control" placeholder="Repita contraseña">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Continuar</button>
+                </form>
+            </div>
+        </div>
+    </section>
+</main>

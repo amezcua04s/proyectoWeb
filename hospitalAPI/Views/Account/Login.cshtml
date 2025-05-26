@@ -1,0 +1,30 @@
+﻿@{
+    ViewData["Title"] = "Iniciar sesión Hospital Johnson";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="mb-0 text-center">Control de Citas Hospital Johnson</h1>
+<main class="container my-5">
+    <section class="mt-5">
+        <div class="card mx-auto shadow" style="max-width: 400px;">
+            <div class="card-body">
+                <h4 class="card-title text-center mb-4">Iniciar Sesión</h4>
+                <form asp-action="Login" asp-controller="Account" method="post">
+                    <div class="mb-3">
+                        <label for="usuario" class="form-label">Usuario/Correo Electrónico</label>
+                        <input type="text" id="usuario" name="usuario" class="form-control" placeholder="Ingrese su usuario o correo">
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Contraseña</label>
+                        <input type="password" id="password" name="password" class="form-control" placeholder="Ingrese su contraseña">
+                    </div>
+                    <div class="form-check mb-3">
+                        <input type="checkbox" id="recordar" name="recordar" class="form-check-input">
+                        <label for="recordar" class="form-check-label">Recordar Usuario</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button>
+                </form>
+            </div>
+        </div>
+    </section>
+</main>

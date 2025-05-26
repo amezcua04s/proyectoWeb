@@ -16,6 +16,6 @@
 
         public List<String> especialidad { get; set; } = new List<String>();
         public List<String> horario { get; set; } = new List<String>();    
-
+        
     }
 }

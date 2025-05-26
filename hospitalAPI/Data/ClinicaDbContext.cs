@@ -9,7 +9,7 @@ namespace hospitalAPI.Data
         public ClinicaDbContext(DbContextOptions<ClinicaDbContext> options) : base(options) { }
 
         public DbSet<Doctor> Doctores { get; set; }
-        public DbSet<Usuario> Usuarios { get; set; } //Solo se utiliza para el admin
+        public DbSet<Admin> Adminstradores { get; set; } //Solo se utiliza para el admin
         public DbSet<Paciente> Pacientes { get; set; }
 
 

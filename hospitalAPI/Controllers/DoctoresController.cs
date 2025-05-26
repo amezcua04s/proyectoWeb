@@ -7,6 +7,7 @@ namespace hospitalAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+
     public class DoctoresController : ControllerBase
     {
         private readonly ClinicaDbContext _context;
@@ -83,6 +84,13 @@ namespace hospitalAPI.Controllers
             return NoContent();
         }
 
+    }
+    public class DoctorController : Controller
+    {
+        public IActionResult CitasProgramadas()
+        {
+            return View();
+        }
     }
 
 }
