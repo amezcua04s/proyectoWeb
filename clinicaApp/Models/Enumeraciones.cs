@@ -1,0 +1,32 @@
+﻿namespace clinicaApp.Models
+{
+    public enum Sexo { 
+        MASCULINO = 0,
+        FEMENINO = 1
+
+    }
+
+    public enum Dias {
+        DOMINGO = 0,
+        LUNES = 1,
+        MARTES = 2,
+        MIERCOLES = 3,
+        JUEVES = 4,
+        VIERNES = 5,
+        SABADO = 6
+    }
+
+    public enum EstadoCita {
+
+        Pendiente = 0,
+        Confirmada = 1,
+        Completada = 2,
+        Cancelada = 3,
+        NoAsistio = 4
+
+    }
+
+    public class Enumeraciones
+    {
+    }
+}

@@ -1,0 +1,60 @@
+﻿@{
+    ViewData["Title"] = "Citas Médicas Hospital Johnson";
+}
+
+
+    <section class="row align-items-center bg-light p-4 rounded shadow mx-3 my-4" style="background-color: #e4e8ec;">
+        <div class="col-md-6 mb-3 mb-md-0">
+            <h3 class="text-dark">Tu Panel de Citas en Hospital Johnson</h3>
+            <p>
+                Aquí puedes gestionar tus citas, ver nuestras especialidades y agendar nuevos encuentros con nuestros profesionales.
+            </p>
+            <div class="mt-4">
+                <a asp-controller="Paciente" asp-action="AgendarCita" class="btn custom-btn btn-lg me-3">Agendar Nueva Cita</a>
+                <a asp-controller="Paciente" asp-action="CitasProgramadas" class="btn custom-btn btn-lg">Ver Mis Citas</a>
+            </div>
+        </div>
+        <div class="col-md-6 d-flex justify-content-center">
+            <img src="~/img/principal/hospital.png" alt="Hospital Johnson" class="img-fluid rounded" style="max-width: 50%; height: auto;">
+        </div>
+    </section>
+
+    <section id="especialidades" class="mb-5">
+        <h2 class="text-center mb-4">Especialidades Disponibles</h2>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card h-100 d-flex flex-column shadow-sm">
+                    <img src="~/img/principal/imagen3.jpg" class="card-img-top" alt="Psicología Hospitalaria">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">Psicología Hospitalaria</h5>
+                        <p class="card-text">Apoyo emocional y acompañamiento durante el proceso de duelo.</p>
+                        <a asp-controller="Paciente" asp-action="AgendarCita" class="btn custom-btn mt-auto">Agendar Cita</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 d-flex flex-column shadow-sm">
+                    <img src="~/img/principal/imagen4.jpg" class="card-img-top" alt="Trastornos del Sueño">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">Trastornos del Sueño</h5>
+                        <p class="card-text">Expertos en insomnio, apnea del sueño y más.</p>
+                        <a asp-controller="Paciente" asp-action="AgendarCita" class="btn custom-btn mt-auto">Agendar Cita</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 d-flex flex-column shadow-sm">
+                    <img src="~/img/principal/imagen5.jpg" class="card-img-top" alt="Cirugía Robótica">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">Cirugía Robótica</h5>
+                        <p class="card-text">Tecnología avanzada para procedimientos quirúrgicos.</p>
+                        <a asp-controller="Paciente" asp-action="AgendarCita" class="btn custom-btn mt-auto">Agendar Cita</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    @* Puedes añadir más secciones para el usuario logueado aquí, como próximos citas, etc. *@
+
