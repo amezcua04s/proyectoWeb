@@ -1,5 +1,10 @@
 ﻿namespace clinicaApp.Models
 {
+    /*
+     Un expediente tiene un pacienta (1 : 1)
+     Un paciente tiene un expediente (1 : 1)
+     */
+
     public class Expediente
     {
         public int Id { get; set; }

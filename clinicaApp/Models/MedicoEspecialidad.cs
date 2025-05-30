@@ -8,7 +8,7 @@
         Muchos a Muchos (TRANSITIVA)
 
         1 MedicoEspecialidad tiene un medico (1 : 1)
-        1 MedicoEspecialidad tiene una especialidad (1 : 1) 
+        1 MedicoEspecialidad tiene muchas especialidades (1 : M) 
      
      */
     public class MedicoEspecialidad
@@ -19,10 +19,10 @@
         public int MedicoId { get; set; }
         public Medico Medico { get; set; }
 
-        // Llave foránea para la especialidad a la que pertenece este medicoEspecialidad
-        public int EspecialidadId { get; set; }
-        public Especialidad Especialidad { get; set; }
-
+        // llaves foraneas y especialidades que pertenecen a este doctor
+        public List<int> EspecialidadId { get; set; }
+        public List<Especialidad> Especialidad { get; set; }
+        //Acceder solamente al nombre de la especialidad (catalogo)
 
 
     }

@@ -9,8 +9,14 @@
     1 especialidad tiene muchos doctores (1 : M) 
     1 doctor tiene muchas especialidades (1 : M)
     Muchos a Muchos (TRANSITIVA)
+
+    Especialidad es un catalogo
      */
     public class Especialidad
     {
+        public int Id { get; set; }
+        public string Nombre { get; set; }
+         
+
     }
 }
