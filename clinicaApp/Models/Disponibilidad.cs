@@ -18,27 +18,23 @@ namespace clinicaApp.Models
     {
         public int Id { get; set; }
 
-        // Clave foránea para el médico al que pertenece esta disponibilidad
+        [Required]
         public int MedicoId { get; set; }
         public Medico Medico { get; set; }
 
-        // Día de la semana (ENUM @Enumeraciones)
+        // Día de la semana
         [Required]
         public Dias DiaDeLaSemana { get; set; }
 
-        // Hora de inicio y fin de la disponibilidad
+        // Hora específica de la disponibilidad (ej. 7:00, 8:00)
         [Required]
         [DataType(DataType.Time)]
-        public TimeSpan HoraInicio { get; set; }
+        public TimeSpan Hora { get; set; }
 
-        [Required]
-        [DataType(DataType.Time)]
-        public TimeSpan HoraFin { get; set; }
+        // Si ese horario está ocupado o no
+        public bool EstaOcupado { get; set; } = false;
 
-        // ID de la zona horaria para esta disponibilidad
-        // Este ID se usará para obtener un objeto TimeZoneInfo
-        [Required]
-        public string TimeZoneId { get; set; }
-
+        // Zona horaria si la necesitas (opcional)
+        public string? TimeZoneId { get; set; }
     }
 }

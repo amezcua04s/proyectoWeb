@@ -8,7 +8,6 @@ namespace clinicaApp.Models
         [Required]
         public string UserId { get; set; }
         public ClinicaUser User { get; set; }
-        public Sexo Sexo { get; set; }
         public DateTime Nacimiento { get; set; }
         public List<String> alergias { get; set; } = new List<String>();
         public List<String> enfermedades { get; set; } = new List<String>();

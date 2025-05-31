@@ -11,11 +11,26 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>@ViewData["Title"] - Admin</title>
-    <link href="~/adminlte/plugins/fontawesome-free/css/all.min.css" rel="stylesheet" />
-    <link href="~/adminlte/dist/css/adminlte.min.css" rel="stylesheet" />
+    <title>@ViewData["Title"] - Dashboard Admin</title>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/fontawesome/css/all.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet" href="~/adminlte/dist/css/adminlte.min.css" />
+
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/clinicaApp.styles.css" asp-append-version="true" />
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="~/adminlte/dist/js/adminlte.min.js"></script>
+
+    <script src="~/lib/fontawesome/js/all.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
     <div class="wrapper">
 
         <!-- Navbar -->
@@ -55,15 +70,33 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
                         <li class="nav-item">
-                            <a asp-controller="Productos" asp-action="Create" class="nav-link">
+                            <a asp-controller="Home" asp-action="Index" class="nav-link">
                                 <i class="nav-icon fas fa-plus"></i>
-                                <p>Registrar Medicamento</p>
+                                <p>Página principal</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a asp-controller="Productos" asp-action="Index" class="nav-link">
+                            <a asp-controller="Medico" asp-action="Create" class="nav-link">
+                                <i class="nav-icon fas fa-plus"></i>
+                                <p>Registrar Medico</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="Medico" asp-action="Index" class="nav-link">
                                 <i class="nav-icon fas fa-th-list"></i>
-                                <p>Ver Medicamentos</p>
+                                <p>Ver Medicos</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="Especialidad" asp-action="Create" class="nav-link">
+                                <i class="nav-icon fas fa-plus"></i>
+                                <p>Registrar especialidad</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="Especialidad" asp-action="Index" class="nav-link">
+                                <i class="nav-icon fas fa-th-list"></i>
+                                <p>Ver especialidades</p>
                             </a>
                         </li>
                     </ul>
@@ -77,10 +110,5 @@
         </div>
 
     </div>
-
-    <!-- Scripts -->
-    <script src="~/adminlte/plugins/jquery/jquery.min.js"></script>
-    <script src="~/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="~/adminlte/dist/js/adminlte.js"></script>
 </body>
 </html>
