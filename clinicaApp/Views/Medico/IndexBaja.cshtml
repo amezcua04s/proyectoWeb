@@ -1,0 +1,45 @@
+﻿@model IEnumerable<clinicaApp.Models.Medico>
+
+@{
+    ViewData["Title"] = "Médicos dados de baja";
+    Layout = "_LayoutAdminLTE";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4 text-danger">Médicos dados de baja</h2>
+    <a asp-action="IndexAdmin" class="btn btn-secondary mb-3">Volver al listado activo</a>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped align-middle">
+            <thead class="table-danger">
+                <tr>
+                    <th>Foto</th>
+                    <th>Nombre</th>
+                    <th>Correo</th>
+                    <th>Teléfono</th>
+                    <th>Especialidad</th>
+                    <th>Cédula</th>
+                    <th>Sexo</th>
+                    <th>Fecha Nacimiento</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <img src="@item.Foto" class="img-thumbnail rounded-circle" style="width: 60px; height: 60px; object-fit: cover;" />
+                        </td>
+                        <td>@item.User.Nombre @item.User.Paterno @item.User.Materno</td>
+                        <td>@item.User.Email</td>
+                        <td>@item.User.Telefono</td>
+                        <td>@item.Especialidad</td>
+                        <td>@item.CedulaProfesional</td>
+                        <td>@item.User.Sexo</td>
+                        <td>@item.Nacimiento.ToShortDateString()</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

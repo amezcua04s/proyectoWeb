@@ -9,13 +9,12 @@ namespace clinicaApp.Models
         public string UserId { get; set; }
         public ClinicaUser User { get; set; }
         public DateTime Nacimiento { get; set; }
-        public List<String> alergias { get; set; } = new List<String>();
-        public List<String> enfermedades { get; set; } = new List<String>();
-        public List<String> medicamentos { get; set; } = new List<String>();
-        public List<String> antecedentes { get; set; } = new List<String>();
-        public List<String> cirugias { get; set; } = new List<String>();
-        public List<String> tratamientos { get; set; } = new List<String>();
-
+        public List<String> Alergias { get; set; } = new List<String>();
+        public List<String> Enfermedades { get; set; } = new List<String>();
+        public List<String> Medicamentos { get; set; } = new List<String>();
+        public List<String> Antecedentes { get; set; } = new List<String>();
+        public List<String> Cirugias { get; set; } = new List<String>();
+        public List<String> Tratamientos { get; set; } = new List<String>();
 
     }
 }

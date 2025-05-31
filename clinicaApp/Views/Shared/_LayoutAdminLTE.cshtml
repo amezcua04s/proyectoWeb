@@ -13,22 +13,11 @@
     <meta charset="utf-8" />
     <title>@ViewData["Title"] - Dashboard Admin</title>
     <script type="importmap"></script>
-    <link rel="stylesheet" href="~/lib/fontawesome/css/all.min.css" />
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="~/adminlte/plugins/fontawesome-free/css/all.min.css" rel="stylesheet" />
+    <link href="~/adminlte/dist/css/adminlte.min.css" rel="stylesheet" />
 
-    <link rel="stylesheet" href="~/adminlte/dist/css/adminlte.min.css" />
-
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/clinicaApp.styles.css" asp-append-version="true" />
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script src="~/adminlte/dist/js/adminlte.min.js"></script>
-
-    <script src="~/lib/fontawesome/js/all.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
     <div class="wrapper">
@@ -36,21 +25,18 @@
         <!-- Navbar -->
         <nav class="main-header navbar navbar-expand navbar-white navbar-light">
             <ul class="navbar-nav ml-auto">
-                @if (User.Identity.IsAuthenticated)
-                {
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
-                            <i class="fas fa-user"></i> @nombreCompleto
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right">
-                            <form asp-controller="Account" asp-action="Logout" method="post" class="dropdown-item">
-                                <button type="submit" class="btn btn-link text-dark p-0 m-0" style="text-decoration: none;">
-                                    <i class="fas fa-sign-out-alt"></i> Cerrar sesión
-                                </button>
-                            </form>
-                        </div>
-                    </li>
-                }
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fas fa-user"></i> @nombreCompleto
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <form asp-controller="Account" asp-action="Logout" method="post" class="dropdown-item">
+                            <button type="submit" class="btn btn-link text-dark p-0 m-0" style="text-decoration: none;">
+                                <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+                            </button>
+                        </form>
+                    </div>
+                </li>
             </ul>
         </nav>
 
@@ -63,30 +49,34 @@
             <div class="sidebar">
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="info">
-                        <a href="#" class="d-block">@nombreCompleto</a>
+                        <a asp-controller="Home" asp-action="Index" class="nav-link">
+                            <i class="fa fa-home"> </i>
+                            Página principal
+                        </a>
                     </div>
                 </div>
 
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
                         <li class="nav-item">
-                            <a asp-controller="Home" asp-action="Index" class="nav-link">
-                                <i class="nav-icon fas fa-plus"></i>
-                                <p>Página principal</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
                             <a asp-controller="Medico" asp-action="Create" class="nav-link">
                                 <i class="nav-icon fas fa-plus"></i>
-                                <p>Registrar Medico</p>
+                                <p>Registrar Médico</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a asp-controller="Medico" asp-action="Index" class="nav-link">
+                            <a asp-controller="Medico" asp-action="IndexAdmin" class="nav-link">
                                 <i class="nav-icon fas fa-th-list"></i>
-                                <p>Ver Medicos</p>
+                                <p>Ver Médicos</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-action="IndexBaja" asp-controller="Medico">
+                                <i class="fas fa-user-slash"></i>
+                                <p>Médicos dados de baja</p>
+                            </a>
+                        </li>
+
                         <li class="nav-item">
                             <a asp-controller="Especialidad" asp-action="Create" class="nav-link">
                                 <i class="nav-icon fas fa-plus"></i>
@@ -110,5 +100,8 @@
         </div>
 
     </div>
+    <script src="~/adminlte/plugins/jquery/jquery.min.js"></script>
+    <script src="~/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/adminlte/dist/js/adminlte.min.js"></script>
 </body>
 </html>

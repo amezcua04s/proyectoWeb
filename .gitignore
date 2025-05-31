@@ -1,3 +1,6 @@
 clinicaApp/obj/
 clinicaApp/.vs/
 clinicaApp/bin/
+clinicaApp/Migrations/
+clinicaApp/wwwroot/images/*
+*.sql

@@ -1,0 +1,104 @@
+﻿@model clinicaApp.ViewModels.MedicoEditViewModel
+
+@{
+    ViewData["Title"] = "Editar Médico";
+    Layout = "_LayoutAdminLTE";
+}
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <h1>@ViewData["Title"]</h1>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">Editar Médico</h3>
+                </div>
+
+                <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                    <div class="card-body">
+                        <input type="hidden" asp-for="Id" />
+
+                        <div class="form-group">
+                            <label asp-for="Nombre"></label>
+                            <input asp-for="Nombre" class="form-control" />
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Paterno"></label>
+                            <input asp-for="Paterno" class="form-control" />
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Materno"></label>
+                            <input asp-for="Materno" class="form-control" />
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Telefono"></label>
+                            <input asp-for="Telefono" class="form-control" />
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Correo"></label>
+                            <input asp-for="Correo" class="form-control" />
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Sexo"></label>
+                            <select asp-for="Sexo" class="form-control">
+                                @foreach (var sexo in Enum.GetValues(typeof(clinicaApp.Models.Sexo)))
+                                {
+                                    <option value="@sexo" selected="@(Model.Sexo == (clinicaApp.Models.Sexo)sexo)">
+                                        @sexo
+                                    </option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Especialidad"></label>
+                            <input asp-for="Especialidad" class="form-control" />
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="CedulaProfesional"></label>
+                            <input asp-for="CedulaProfesional" class="form-control" />
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Nacimiento"></label>
+                            <input asp-for="Nacimiento" type="date" class="form-control" />
+                        </div>
+
+                        <div class="form-group">
+                            <label>Foto actual</label><br />
+                            @if (!string.IsNullOrEmpty(Model.FotoActual))
+                            {
+                                <img src="@Model.FotoActual" class="img-thumbnail rounded-circle" style="max-width: 120px;" />
+                            }
+                            else
+                            {
+                                <p>No hay foto.</p>
+                            }
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="NuevaFoto">Nueva foto (opcional)</label>
+                            <input asp-for="NuevaFoto" type="file" class="form-control-file" accept=".jpg,.jpeg,.png" />
+                        </div>
+                    </div>
+
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</div>

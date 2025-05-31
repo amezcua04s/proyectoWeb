@@ -11,7 +11,7 @@ namespace clinicaApp.Data
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             var userManager = serviceProvider.GetRequiredService<UserManager<ClinicaUser>>();
 
-            string[] roles = new[] { "Administrador", "Cliente" };
+            string[] roles = new[] { "Administrador", "Doctor", "Paciente" };
             foreach (var role in roles)
             {
                 if (!await roleManager.RoleExistsAsync(role))
@@ -28,6 +28,7 @@ namespace clinicaApp.Data
                 {
                     UserName = adminEmail,
                     Email = adminEmail,
+                    Correo = adminEmail,
                     Nombre = "Admin",
                     Materno = "Principal",
                     Registro = DateTime.Now

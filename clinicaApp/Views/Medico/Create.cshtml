@@ -1,5 +1,103 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model clinicaApp.ViewModels.MedicoViewModel
+
 @{
+    ViewData["Title"] = "Registrar Médico";
+    Layout = "_LayoutAdminLTE";
+}
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <h1>@ViewData["Title"]</h1>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">Nuevo médico</h3>
+                </div>
+
+                <form asp-action="Create" enctype="multipart/form-data" method="post">
+                    <div class="card-body">
+
+                        <div class="form-group">
+                            <label asp-for="Nombre"></label>
+                            <input asp-for="Nombre" class="form-control" />
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Materno"></label>
+                            <input asp-for="Materno" class="form-control" />
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Paterno"></label>
+                            <input asp-for="Paterno" class="form-control" />
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Correo"></label>
+                            <input asp-for="Correo" class="form-control" />
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Contrasenia"></label>
+                            <input asp-for="Contrasenia" class="form-control"/>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Telefono"></label>
+                            <input asp-for="Telefono" class="form-control" />
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Sexo"></label>
+                            <select asp-for="Sexo" class="form-control">
+                                <option value="">-- Seleccione una opción --</option>
+                                @foreach (var item in Html.GetEnumSelectList<clinicaApp.Models.Sexo>())
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <small class="form-label">Fecha de Nacimiento</small>
+                            <label asp-for="Nacimiento"></label>
+                            <input asp-for="Nacimiento" type="date" class="form-control" />
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Especialidad"></label>
+                            <input asp-for="Especialidad" class="form-control" />
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="CedulaProfesional"></label>
+                            <input asp-for="CedulaProfesional" class="form-control" />
+                        </div>
+
+
+                        <div class="form-group">
+                            <label asp-for="Foto"></label>
+                            <input asp-for="Foto" type="file" class="form-control-file" />
+                        </div>
+
+                    </div>
+
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-primary">Registrar</button>
+                        <a asp-controller="Admin" asp-action="Index" class="btn btn-secondary">Volver</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

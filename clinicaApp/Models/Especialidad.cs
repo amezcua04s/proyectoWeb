@@ -11,7 +11,7 @@
     Muchos a Muchos (TRANSITIVA)
 
     Especialidad es un catalogo
-     */
+*/     
     public class Especialidad
     {
         public int Id { get; set; }

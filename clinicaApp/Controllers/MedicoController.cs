@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using clinicaApp.ViewModels;
 
 
 namespace clinicaApp.Controllers
@@ -12,44 +13,59 @@ namespace clinicaApp.Controllers
     {
         private readonly ClinicaAppDbContext _context;
         private readonly IWebHostEnvironment _env;
-        private readonly UserManager<ClinicaUser> _userManager; // <--- Sin el namespace completo aquí
+        private readonly UserManager<ClinicaUser> _userManager;
 
-
-        public MedicoController(ClinicaAppDbContext context, IWebHostEnvironment env, UserManager<ClinicaUser> userManager) // <--- Aquí también, solo el tipo
+        public MedicoController(ClinicaAppDbContext context, IWebHostEnvironment env, UserManager<ClinicaUser> userManager)
         {
             _context = context;
             _env = env;
             _userManager = userManager;
         }
 
-
+        //Dos vistas de index para admin, muestra los medicos activos y todos los inactivos
 
         [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> IndexAdmin()
         {
             var medicos = await _context.Medicos
-                .Include(m => m.User) // Incluye la información del usuario asociado al médico
+                .Include(m => m.User)
+                .Where(m => m.User.Activo == true) // <-- Solo medicos activos
                 .ToListAsync();
-            return View(await _context.Medicos.ToListAsync());
+
+            return View(medicos);
         }
+
+        /*
+         muestra los que estan dados de baja
+         */
+        [Authorize(Roles = "Administrador")]
+        public async Task<IActionResult> IndexBaja()
+        {
+            var medicosBaja = await _context.Medicos
+                .Include(m => m.User)
+                .Where(m => m.User.Activo == false)
+                .ToListAsync();
+
+            return View(medicosBaja);
+        }
+
 
         /*
          Solo muestra lo escencial del médico, no incluye la información del usuario.
          */
-        [AllowAnonymous] // Permite acceso sin login, va a ser un preview de los medicos disponibles
+        [AllowAnonymous]
         public async Task<IActionResult> Index() {
             var medicos = await _context.Medicos
-                .Include(m=> m.User)
+                .Include(m => m.User)
+                .Where(m => m.User.Activo == true)//Incluir solamente los que tienen el estado activo como true
                 .Select(m => new Medico
                 {
                     Id = m.Id,
                     UserId = m.UserId,
                     Especialidad = m.Especialidad,
                     CedulaProfesional = m.CedulaProfesional,
-                    Telefono = m.Telefono,
                     Foto = m.Foto,
-                    Disponibilidades = m.Disponibilidades,
-                    
+                    //Disponibilidades = m.Disponibilidades,
 
                     User = new ClinicaUser
                     {
@@ -57,6 +73,9 @@ namespace clinicaApp.Controllers
                         Materno = m.User.Materno,
                         Paterno = m.User.Paterno,
                         Sexo = m.User.Sexo,
+                        Correo = m.User.Correo,
+                        Contrasenia = m.User.Contrasenia,
+                        Telefono = m.User.Telefono,
 
                     },
                 })
@@ -65,74 +84,67 @@ namespace clinicaApp.Controllers
         }
 
         [Authorize(Roles = "Administrador")]
-        public IActionResult Create() => View();
+        public IActionResult Create() => View(new MedicoViewModel());
 
         [HttpPost]
         [Authorize(Roles = "Administrador")]
-        public async Task<IActionResult> Create(Medico medico, IFormFile Foto)
+        public async Task<IActionResult> Create(MedicoViewModel model)
         {
             if (ModelState.IsValid)
             {
-                // Crear el nuevo usuario
-                var user = new ClinicaUser { 
-                    Nombre = medico.User.Nombre,
-                    Paterno = medico.User.Paterno,
-                    Materno = medico.User.Materno,
-                    Telefono = medico.User.Telefono,
-                    Sexo = medico.User.Sexo,
-                    UserName = medico.User.Correo, 
-                    Email = medico.User.Correo };
-                var result = await _userManager.CreateAsync(user, medico.User.Contrasenia);
+                var user = new ClinicaUser
+                {
+                    Nombre = model.Nombre,
+                    Paterno = model.Paterno,
+                    Materno = model.Materno,
+                    Sexo = model.Sexo,
+                    Telefono = model.Telefono,
+                    UserName = model.Correo,
+                    Email = model.Correo,
+                    Activo = true,
+
+                };
+                var result = await _userManager.CreateAsync(user, model.Contrasenia);
 
                 if (result.Succeeded)
                 {
-                    var roleResult = await _userManager.AddToRoleAsync(user, "Doctor");
+                    await _userManager.AddToRoleAsync(user, "Doctor");
 
-                    if (!roleResult.Succeeded)
+                    var medico = new Medico
                     {
-                        // Aquí, simplemente agregamos los errores al ModelState
-                        foreach (var error in roleResult.Errors)
-                        {
-                            ModelState.AddModelError(string.Empty, $"Error al asignar rol: {error.Description}");
-                        }
-                        // Si no se puede asignar el rol, es posible que quieras eliminar el usuario que acabas de crear
-                        await _userManager.DeleteAsync(user);
-                        return View(medico); // Regresar a la vista con el error
-                    }
+                        User = user,
+                        Nacimiento = model.Nacimiento,
+                        Especialidad = model.Especialidad,
+                        CedulaProfesional = model.CedulaProfesional
+                    };
 
-                    // Asignar el UserId del usuario recién creado al Medico
-                    medico.UserId = user.Id;
-
-                    // Manejar la subida de la foto
-                    if (Foto != null)
+                    // Manejo de imagen
+                    if (model.Foto != null)
                     {
-                        var fileName = Path.GetFileName(Foto.FileName);
-                        var uploadFolder = Path.Combine(_env.WebRootPath, "images", "medicos");
-                        if (!Directory.Exists(uploadFolder))
+                        var fileName = Guid.NewGuid() + Path.GetExtension(model.Foto.FileName);
+                        var path = Path.Combine(_env.WebRootPath, "images", "medicos");
+                        if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+                        var uploadImage = Path.Combine(path, fileName);
+
+                        using (var stream = new FileStream(uploadImage, FileMode.Create))
                         {
-                            Directory.CreateDirectory(uploadFolder);
+                            await model.Foto.CopyToAsync(stream);
                         }
-                        var path = Path.Combine(uploadFolder, fileName);
-                        using (var stream = new FileStream(path, FileMode.Create))
-                        {
-                            await Foto.CopyToAsync(stream);
-                        }
+
                         medico.Foto = "/images/medicos/" + fileName;
                     }
                     else
                     {
-                        medico.Foto = "/images/default_doctor.png"; // Imagen por defecto
+                        medico.Foto = "/images/default_doctor.png";
                     }
 
-                    // 5. Guardar el perfil del médico
                     _context.Add(medico);
                     await _context.SaveChangesAsync();
 
-                    return RedirectToAction(nameof(Index)); // Redirigir a la lista de médicos
+                    return RedirectToAction(nameof(Index));
                 }
                 else
                 {
-                    // Si la creación del usuario falla, agregar los errores al ModelState
                     foreach (var error in result.Errors)
                     {
                         ModelState.AddModelError(string.Empty, error.Description);
@@ -140,10 +152,9 @@ namespace clinicaApp.Controllers
                 }
             }
 
-            // Si el ModelState no es válido o si la creación del usuario/rol falló,
-            // regresa a la vista con los errores.
-            return View(medico);
+            return View(model);
         }
+
 
         /*
          EDITAR
@@ -156,69 +167,93 @@ namespace clinicaApp.Controllers
                 .Include(m => m.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            return medico == null ? NotFound() : View(medico);
+            if (medico == null) return NotFound();
+
+            var model = new MedicoEditViewModel
+            {
+                Id = medico.Id,
+                Nombre = medico.User.Nombre,
+                Paterno = medico.User.Paterno,
+                Materno = medico.User.Materno,
+                Telefono = medico.User.Telefono,
+                Correo = medico.User.Correo,
+                Sexo = medico.User.Sexo,
+                Especialidad = medico.Especialidad,
+                CedulaProfesional = medico.CedulaProfesional,
+                Nacimiento = medico.Nacimiento,
+                FotoActual = medico.Foto
+            };
+
+            return View(model);
         }
+
 
         //Maneja la edición del médico.
         //CUANDO SE DA SUBMIT AL FORMULARIO DE EDICIÓN, SE ENVÍA UNA SOLICITUD POST CON LOS DATOS DEL MÉDICO.
         [HttpPost]
         [Authorize(Roles = "Administrador")]
-        public async Task<IActionResult> Edit(int id, Medico medico, IFormFile RutaImagen)
+        public async Task<IActionResult> Edit(MedicoEditViewModel model)
         {
-            if (id != medico.Id) return NotFound();
+            if (!ModelState.IsValid) return View(model);
 
-            if (ModelState.IsValid)
+            var medicoDb = await _context.Medicos
+                .Include(m => m.User)
+                .FirstOrDefaultAsync(m => m.Id == model.Id);
+
+            if (medicoDb == null) return NotFound();
+
+            // Actualiza datos del usuario
+            medicoDb.User.Nombre = model.Nombre;
+            medicoDb.User.Paterno = model.Paterno;
+            medicoDb.User.Materno = model.Materno;
+            medicoDb.User.Telefono = model.Telefono;
+            medicoDb.User.Correo = model.Correo;
+            medicoDb.User.Sexo = model.Sexo;
+
+            // Datos del médico
+            medicoDb.Especialidad = model.Especialidad;
+            medicoDb.CedulaProfesional = model.CedulaProfesional;
+            medicoDb.Nacimiento = model.Nacimiento;
+
+            if (model.NuevaFoto != null)
             {
-                try
-                {
-                    var medicoDb = await _context.Medicos.FindAsync(id);
-                    if (medicoDb == null) return NotFound();
+                var fileName = Guid.NewGuid() + Path.GetExtension(model.NuevaFoto.FileName);
+                var path = Path.Combine(_env.WebRootPath, "images", "medicos");
 
-                    medicoDb.Especialidad = medico.Especialidad;
-                    medicoDb.CedulaProfesional = medico.CedulaProfesional;
-                    medicoDb.Notas = medico.Notas;
-                    medicoDb.Telefono = medico.Telefono;
-                    medicoDb.User.Sexo = medico.User.Sexo;
-                    medicoDb.Nacimiento = medico.Nacimiento;
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path);
 
-                    if (RutaImagen != null)
-                    {
-                        var fileName = Path.GetFileName(RutaImagen.FileName);
-                        var path = Path.Combine(_env.WebRootPath, "images", fileName);
-                        using var stream = new FileStream(path, FileMode.Create);
-                        await RutaImagen.CopyToAsync(stream);
-                        medicoDb.Foto = "/images/" + fileName;
-                    }
+                var fullPath = Path.Combine(path, fileName);
 
-                    _context.Update(medicoDb);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!_context.Medicos.Any(m => m.Id == id)) return NotFound();
-                    throw;
-                }
-                return RedirectToAction(nameof(Index));
+                using var stream = new FileStream(fullPath, FileMode.Create);
+                await model.NuevaFoto.CopyToAsync(stream);
+
+                medicoDb.Foto = "/images/medicos/" + fileName;
             }
-            return View(medico);
+
+            _context.Update(medicoDb);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(IndexAdmin));
         }
+
 
         [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Delete(int id)
         {
             var medico = await _context.Medicos
-                .Include(m => m.Disponibilidades)
-                .Include(m => m.Citas)
-                .Include(m => m.Expedientes)
+                .Include(m => m.User) 
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            if (medico != null)
+            if (medico?.User != null)
             {
-                _context.Medicos.Remove(medico);
+                medico.User.Activo = false;
                 await _context.SaveChangesAsync();
             }
-            return RedirectToAction(nameof(Index));
+
+            return RedirectToAction(nameof(IndexAdmin));
         }
+
 
     }
 
