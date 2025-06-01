@@ -17,6 +17,9 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/clinicaApp.styles.css" asp-append-version="true" />
+    <link href="~/adminlte/plugins/fontawesome-free/css/all.min.css" rel="stylesheet" />
+    <link href="~/adminlte/dist/css/adminlte.min.css" rel="stylesheet" />
+
 </head>
 <body>
     <header>
@@ -71,6 +74,22 @@
                         
                         }
                     </ul>
+
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-toggle="dropdown">
+                                <i class="fas fa-user"></i> @nombreCompleto
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <form asp-controller="Account" asp-action="Logout" method="post" class="dropdown-item">
+                                    <button type="submit" class="btn btn-link text-dark p-0 m-0" style="text-decoration: none;">
+                                        <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+                                    </button>
+                                </form>
+                            </div>
+                        </li>
+                    </ul>
+                
                 </div>
             </div>
 
@@ -91,6 +110,9 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/adminlte/plugins/jquery/jquery.min.js"></script>
+    <script src="~/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/adminlte/dist/js/adminlte.min.js"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

@@ -33,7 +33,15 @@
                         <td>@item.User.Nombre @item.User.Paterno @item.User.Materno</td>
                         <td>@item.User.Email</td>
                         <td>@item.User.Telefono</td>
-                        <td>@item.Especialidad</td>
+                        @if (item.Especialidades != null && item.Especialidades.Any())
+                        {
+                            @string.Join(", ", item.Especialidades)
+                        }
+                        else
+                        {
+                            <span>No asignadas</span>
+                        }
+
                         <td>@item.CedulaProfesional</td>
                         <td>@item.User.Sexo</td>
                         <td>@item.Nacimiento.ToShortDateString()</td>

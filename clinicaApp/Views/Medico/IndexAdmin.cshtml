@@ -21,7 +21,7 @@
                         <th>Teléfono</th>
                         <th>Sexo</th>
                         <th>Fecha de Nacimiento</th>
-                        <th>Especialidad</th>
+                        <th>Especialidades</th>
                         <th>Cédula Profesional</th>
                         <th>Acciones</th>
                     </tr>
@@ -38,7 +38,16 @@
                             <td>@item.User.Telefono</td>
                             <td>@item.User.Sexo</td>
                             <td>@item.Nacimiento.ToShortDateString()</td>
-                            <td>@item.Especialidad</td>
+                            <td>
+                                @if (item.Especialidades != null && item.Especialidades.Any())
+                                {
+                                    @string.Join(", ", item.Especialidades)
+                                }
+                                else
+                                {
+                                    <span>No asignadas</span>
+                                }
+                            </td>
                             <td>@item.CedulaProfesional</td>
                             <td>
                                 <div class="d-flex gap-2">
@@ -65,7 +74,17 @@
                     <p class="card-text"><strong>Teléfono:</strong> @item.User.Telefono</p>
                     <p class="card-text"><strong>Sexo:</strong> @item.User.Sexo</p>
                     <p class="card-text"><strong>Nacimiento:</strong> @item.Nacimiento.ToShortDateString()</p>
-                    <p class="card-text"><strong>Especialidad:</strong> @item.Especialidad</p>
+                    <p class="card-text">
+                        <strong>Especialidades:</strong>
+                        @if (item.Especialidades != null && item.Especialidades.Any())
+                        {
+                            @string.Join(", ", item.Especialidades)
+                        }
+                        else
+                        {
+                            <span>No asignadas</span>
+                        }
+                    </p>
                     <p class="card-text"><strong>Cédula:</strong> @item.CedulaProfesional</p>
                     <div class="d-flex justify-content-center gap-2">
                         <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Editar</a>

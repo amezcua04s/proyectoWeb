@@ -16,7 +16,11 @@
     {
         public int Id { get; set; }
         public string Nombre { get; set; }
-         
+        public string Descripcion { get; set; } = "";
+
+        //Para la relacion con mediocs
+        public ICollection<MedicoEspecialidad>? MedicoEspecialidades { get; set; }
+
 
     }
 }

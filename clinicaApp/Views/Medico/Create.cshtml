@@ -43,7 +43,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label asp-for="Contrasenia"></label>
+                            <label asp-for="Contrasenia">Contraseña</label>
                             <input asp-for="Contrasenia" class="form-control"/>
                         </div>
 
@@ -55,7 +55,7 @@
                         <div class="form-group">
                             <label asp-for="Sexo"></label>
                             <select asp-for="Sexo" class="form-control">
-                                <option value="">-- Seleccione una opción --</option>
+                                <option value="">Seleccione una opción</option>
                                 @foreach (var item in Html.GetEnumSelectList<clinicaApp.Models.Sexo>())
                                 {
                                     <option value="@item.Value">@item.Text</option>
@@ -64,20 +64,56 @@
                         </div>
 
                         <div class="form-group">
-                            <small class="form-label">Fecha de Nacimiento</small>
-                            <label asp-for="Nacimiento"></label>
+                            <label asp-for="Nacimiento">Fecha de Nacimiento</label>
                             <input asp-for="Nacimiento" type="date" class="form-control" />
                         </div>
 
                         <div class="form-group">
-                            <label asp-for="Especialidad"></label>
-                            <input asp-for="Especialidad" class="form-control" />
+                            <label>Especialidades</label>
+                            <div id="especialidades-container">
+                                <select name="EspecialidadesSeleccionadas" class="form-control mb-2">
+                                    @foreach (var item in Model.EspecialidadesDis)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                            </div>
+                            <button type="button" id="agregar-especialidad" class="btn btn-sm btn-secondary">Agregar otra especialidad</button>
+                            <a asp-controller="Especialidad" asp-action="Create" class="btn btn-sm btn-link">Registrar nueva especialidad</a>
                         </div>
 
+
                         <div class="form-group">
-                            <label asp-for="CedulaProfesional"></label>
+                            <label asp-for="CedulaProfesional">Cédula Profesional</label>
                             <input asp-for="CedulaProfesional" class="form-control" />
                         </div>
+
+                        <hr />
+                        <h5>Disponibilidad Horaria</h5>
+
+                        @foreach (var dia in Model.DisponibilidadesPorDia.Keys.ToList())
+                        {
+                            <div class="mb-3 border rounded p-3">
+                                <strong>@dia</strong><br />
+                                <div class="form-check form-switch mb-2">
+                                    <input class="form-check-input toggle-dia" type="checkbox" id="toggle-@dia" checked />
+                                    <label class="form-check-label">Disponible</label>
+                                </div>
+
+                                <div class="row row-cols-4 mb-2" id="horas-@dia">
+                                    @foreach (var hora in Model.TodasLasHoras)
+                                    {
+                                        <div class="col form-check">
+                                            <input class="form-check-input" type="checkbox" 
+                                                   name="DisponibilidadesPorDia[@dia]" value="@hora"
+                                                   id="@($"{dia}_{hora}")" checked />
+                                            <label class="form-check-label" for="@($"{dia}_{hora}")">@hora</label>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        }
+
 
 
                         <div class="form-group">
@@ -92,11 +128,57 @@
                         <a asp-controller="Admin" asp-action="Index" class="btn btn-secondary">Volver</a>
                     </div>
                 </form>
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                            {
+                                <li>@error.ErrorMessage</li>
+                            }
+                        </ul>
+                    </div>
+                }
+
             </div>
         </div>
     </section>
 </div>
 @section Scripts {
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Script 1: Mostrar u ocultar horas según checkbox
+            document.querySelectorAll(".toggle-dia").forEach(toggle => {
+                const dia = toggle.id.replace("toggle-", "");
+                const contenedorHoras = document.getElementById(`horas-${dia}`);
+
+                contenedorHoras.style.display = toggle.checked ? "flex" : "none";
+
+                toggle.addEventListener("change", () => {
+                    contenedorHoras.style.display = toggle.checked ? "flex" : "none";
+                    contenedorHoras.querySelectorAll("input[type='checkbox']").forEach(chk => {
+                        chk.disabled = !toggle.checked;
+                        if (!toggle.checked) chk.checked = false;
+                    });
+                });
+            });
+
+            // Script 2: Clonar select de especialidad
+            const btnAgregar = document.getElementById("agregar-especialidad");
+            if (btnAgregar) {
+                btnAgregar.addEventListener("click", function () {
+                    const container = document.getElementById("especialidades-container");
+                    const selectOriginal = container.querySelector("select");
+                    const nuevoSelect = selectOriginal.cloneNode(true);
+                    container.appendChild(nuevoSelect);
+                });
+            }
+        });
+    </script>
+
+
+
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }

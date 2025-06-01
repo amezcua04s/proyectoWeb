@@ -20,8 +20,8 @@
         public Medico Medico { get; set; }
 
         // llaves foraneas y especialidades que pertenecen a este doctor
-        public List<int> EspecialidadId { get; set; }
-        public List<Especialidad> Especialidad { get; set; }
+        public int EspecialidadId { get; set; }
+        public Especialidad Especialidad { get; set; }
         //Acceder solamente al nombre de la especialidad (catalogo)
 
 

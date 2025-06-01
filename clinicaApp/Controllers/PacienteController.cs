@@ -23,12 +23,12 @@ namespace clinicaApp.Controllers
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly UserManager<ClinicaUser> _userManager;
 
-        public PacienteController(ClinicaAppDbContext context, IWebHostEnvironment webHostEnvironment, UserManager<ClinicaUser> userManager) { 
-        
+        public PacienteController(ClinicaAppDbContext context, IWebHostEnvironment webHostEnvironment, UserManager<ClinicaUser> userManager) {
+
             _context = context;
             _webHostEnvironment = webHostEnvironment;
             _userManager = userManager;
-        
+
         }
 
         public ActionResult Index()
@@ -36,13 +36,39 @@ namespace clinicaApp.Controllers
             return RedirectToAction("Index", "Medico"); //Este index debe regresar hacia el index normal de los doctores
         }
 
-        public ActionResult CrearCita()
+        public async Task<IActionResult> CrearCita(int id) //recibe el id del medico para mostrarlo en
         {
-            return View();
+            var medico = await _context.Medicos
+                .Include(m => m.User)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (medico == null) return NotFound();
+
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return RedirectToAction("Login", "Account");
+
+            return View(medico);
         }
+
 
         public ActionResult Expediente() {
             return View();
         }
+
+        public ActionResult Edit()
+        {
+            return View();
+        } 
+
+        public ActionResult CambiarContrasena()
+        {
+            return View();
+        }
+
+        public ActionResult CitasHechas()
+        {
+            return View();
+        }
+
     }
 }

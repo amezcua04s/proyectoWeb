@@ -1,0 +1,58 @@
+﻿@model IEnumerable<clinicaApp.Models.Especialidad>
+
+@{
+    ViewData["Title"] = "Especialidades";
+    Layout = "_LayoutAdminLTE";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Listado de Especialidades</h2>
+    <a asp-action="Create" class="btn btn-primary mb-3">Registrar Especialidad</a>
+
+    <!-- Tabla para pantallas medianas o grandes -->
+    <div class="d-none d-md-block">
+        <div class="table-responsive">
+            <table class="table table-bordered align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Nombre</td>
+                            <td>@item.Descripcion</td>
+                            <td>
+                                <div class="d-flex gap-2">
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Editar</a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger" onclick="return confirm('¿Desea eliminar esta especialidad?')">Eliminar</a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Vista tipo card para móviles -->
+    <div class="d-block d-md-none">
+        @foreach (var item in Model)
+        {
+            <div class="card mb-3 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title text-center">@item.Nombre</h5>
+                    <p class="card-text text-center text-muted">@item.Descripcion</p>
+                    <div class="d-flex justify-content-center gap-2 mt-3">
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Editar</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger" onclick="return confirm('¿Desea eliminar esta especialidad?')">Eliminar</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

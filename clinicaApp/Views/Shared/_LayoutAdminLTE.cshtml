@@ -4,8 +4,11 @@
 
 @{
     var user = await UserManager.GetUserAsync(User);
-    var nombreCompleto = user != null ? $"{user.Nombre} {user.Materno}" : "Invitado";
+    var nombreCompleto = (user != null && user.Nombre != null && user.Materno != null)
+        ? $"{user.Nombre} {user.Materno}"
+        : "Invitado";
 }
+
 
 <!DOCTYPE html>
 <html>
@@ -15,6 +18,8 @@
     <script type="importmap"></script>
     <link href="~/adminlte/plugins/fontawesome-free/css/all.min.css" rel="stylesheet" />
     <link href="~/adminlte/dist/css/adminlte.min.css" rel="stylesheet" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
 
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -84,7 +89,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a asp-controller="Especialidad" asp-action="Index" class="nav-link">
+                            <a asp-controller="Especialidad" asp-action="IndexAdmin" class="nav-link">
                                 <i class="nav-icon fas fa-th-list"></i>
                                 <p>Ver especialidades</p>
                             </a>
@@ -100,6 +105,7 @@
         </div>
 
     </div>
+
     <script src="~/adminlte/plugins/jquery/jquery.min.js"></script>
     <script src="~/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="~/adminlte/dist/js/adminlte.min.js"></script>
