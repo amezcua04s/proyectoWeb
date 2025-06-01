@@ -9,45 +9,50 @@
         : "Invitado";
 }
 
-
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>@ViewData["Title"] - Dashboard Admin</title>
-    <script type="importmap"></script>
+
     <link href="~/adminlte/plugins/fontawesome-free/css/all.min.css" rel="stylesheet" />
     <link href="~/adminlte/dist/css/adminlte.min.css" rel="stylesheet" />
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-
-
 </head>
-<body class="hold-transition sidebar-mini layout-fixed">
-
-    @await RenderSectionAsync("Scripts", required: false)
+<body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed">
     <div class="wrapper">
 
         <!-- Navbar -->
-        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="fas fa-user"></i> @nombreCompleto
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right">
-                        <form asp-controller="Account" asp-action="Logout" method="post" class="dropdown-item">
-                            <button type="submit" class="btn btn-link text-dark p-0 m-0" style="text-decoration: none;">
-                                <i class="fas fa-sign-out-alt"></i> Cerrar sesión
-                            </button>
-                        </form>
-                    </div>
-                </li>
-            </ul>
+        <nav class="main-header navbar navbar-expand-md navbar-white navbar-light">
+            <div class="container-fluid">
+                <!-- Botón de sidebar-->
+                <button class="navbar-toggler" type="button" data-widget="pushmenu" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Menú de usuario a la derecha -->
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fas fa-user"></i> @nombreCompleto
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <form asp-controller="Account" asp-action="Logout" method="post" class="dropdown-item">
+                                <button type="submit" class="btn btn-link text-dark p-0 m-0" style="text-decoration: none;">
+                                    <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+                                </button>
+                            </form>
+                        </div>
+                    </li>
+                </ul>
+            </div>
         </nav>
 
         <!-- Sidebar -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
-            <a href="~/Admin" class="brand-link">
+            <a href="~/Admin" class="brand-link text-center">
                 <span class="brand-text font-weight-light">Panel Admin</span>
             </a>
 
@@ -55,8 +60,7 @@
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="info">
                         <a asp-controller="Home" asp-action="Index" class="nav-link">
-                            <i class="fa fa-home"> </i>
-                            Página principal
+                            <i class="fa fa-home"></i> Página principal
                         </a>
                     </div>
                 </div>
@@ -81,7 +85,6 @@
                                 <p>Médicos dados de baja</p>
                             </a>
                         </li>
-
                         <li class="nav-item">
                             <a asp-controller="Especialidad" asp-action="Create" class="nav-link">
                                 <i class="nav-icon fas fa-plus"></i>
@@ -99,13 +102,16 @@
             </div>
         </aside>
 
-        <!-- Contenido principal  -->
+        <!-- Contenido principal -->
         <div class="content-wrapper">
             @RenderBody()
         </div>
 
     </div>
 
+    @await RenderSectionAsync("Scripts", required: false)
+
+    <!-- Scripts-->
     <script src="~/adminlte/plugins/jquery/jquery.min.js"></script>
     <script src="~/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="~/adminlte/dist/js/adminlte.min.js"></script>

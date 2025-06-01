@@ -42,5 +42,8 @@ namespace clinicaApp.ViewModels
         };
 
         public IFormFile? Foto { get; set; }
+
+        
+
     }
 }
