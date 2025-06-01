@@ -3,4 +3,5 @@ clinicaApp/.vs/
 clinicaApp/bin/
 clinicaApp/Migrations/
 clinicaApp/wwwroot/images/*
+.vscode/
 *.sql
