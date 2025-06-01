@@ -41,9 +41,20 @@ namespace clinicaApp.Data
                 .HasOne(me => me.Especialidad)
                 .WithMany(e => e.MedicoEspecialidades)
                 .HasForeignKey(me => me.EspecialidadId);
+
+            // medico - cita
+            modelBuilder.Entity<Cita>()
+                .HasOne(c => c.Medico)
+                .WithMany() // Sin propiedad de navegación inversa
+                .HasForeignKey(c => c.MedicoId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Cita>()
+                .HasOne(c => c.Paciente)
+                .WithMany(p => p.Citas)
+                .HasForeignKey(c => c.PacienteId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
-
-
 
     }
 }

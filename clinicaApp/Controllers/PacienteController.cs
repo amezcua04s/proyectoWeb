@@ -65,7 +65,7 @@ namespace clinicaApp.Controllers
             var citas = await _context.Citas
                 .Include(c => c.Medico)
                     .ThenInclude(m => m.User)
-                .Where(c => c.PacienteId == paciente.Id.ToString())
+                .Where(c => c.PacienteId == paciente.Id)
                 .ToListAsync();
 
             ViewBag.Citas = citas;

@@ -16,11 +16,10 @@
     {
         public int Id { get; set; }
 
-        // Cambia a int si `Paciente.Id` es int
-        public string PacienteId { get; set; }
+        public int PacienteId { get; set; }
         public Paciente Paciente { get; set; }
 
-        public string MedicoId { get; set; }
+        public int MedicoId { get; set; }
         public Medico Medico { get; set; }
 
         public DateTime FechaHora { get; set; }
