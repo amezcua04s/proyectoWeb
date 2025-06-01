@@ -61,15 +61,11 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="Especialidades">Especialidades</label>
-                            <select asp-for="Especialidades" class="form-control" multiple>
-                                @foreach (var esp in Model.EspecialidadesDis)
-                                {
-                                    <option value="@esp.Value" selected="@Model.Especialidades.Contains(esp.Value)">
-                                        @esp.Text
-                                    </option>
-                                }
+                            <label asp-for="EspecialidadesSeleccionadas">Especialidades</label>
+                            <select asp-for="EspecialidadesSeleccionadas" asp-items="Model.EspecialidadesDisponibles" class="form-control" multiple size="5">
                             </select>
+                            <small class="form-text text-muted">Puedes seleccionar múltiples opciones.</small>
+                            <a asp-controller="Especialidad" asp-action="Create" class="btn btn-sm btn-link mt-1">Registrar nueva especialidad</a>
                         </div>
 
                         <div class="form-group">
@@ -80,6 +76,33 @@
                         <div class="form-group">
                             <label asp-for="Nacimiento"></label>
                             <input asp-for="Nacimiento" type="date" class="form-control" />
+                        </div>
+
+                        <div class="form-group">
+                            <label>Disponibilidad Horaria</label>
+                            @foreach (var dia in Model.DisponibilidadesPorDia.Keys.ToList())
+                            {
+                                <div class="mb-3 border rounded p-3">
+                                    <strong>@dia</strong><br />
+                                    <div class="form-check form-switch mb-2">
+                                        <input class="form-check-input toggle-dia" type="checkbox" id="toggle-@dia" checked />
+                                        <label class="form-check-label">Disponible</label>
+                                    </div>
+
+                                    <div class="row row-cols-4 mb-2" id="horas-@dia">
+                                        @foreach (var hora in Model.TodasLasHoras)
+                                        {
+                                            var checkedAttr = Model.DisponibilidadesPorDia.ContainsKey(dia) && Model.DisponibilidadesPorDia[dia].Contains(hora) ? "checked" : "";
+                                            <div class="col form-check">
+                                                <input class="form-check-input" type="checkbox"
+                                                       name="DisponibilidadesPorDia[@dia]" value="@hora"
+                                                       id="@($"{dia}_{hora}")" @checkedAttr />
+                                                <label class="form-check-label" for="@($"{dia}_{hora}")">@hora</label>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            }
                         </div>
 
                         <div class="form-group">
@@ -109,3 +132,25 @@
         </div>
     </section>
 </div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".toggle-dia").forEach(toggle => {
+                const dia = toggle.id.replace("toggle-", "");
+                const contenedorHoras = document.getElementById(`horas-${dia}`);
+                contenedorHoras.style.display = toggle.checked ? "flex" : "none";
+                toggle.addEventListener("change", () => {
+                    contenedorHoras.style.display = toggle.checked ? "flex" : "none";
+                    contenedorHoras.querySelectorAll("input[type='checkbox']").forEach(chk => {
+                        chk.disabled = !toggle.checked;
+                        if (!toggle.checked) chk.checked = false;
+                    });
+                });
+            });
+        });
+    </script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

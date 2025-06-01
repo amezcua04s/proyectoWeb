@@ -28,13 +28,13 @@
                         </div>
 
                         <div class="form-group">
-                            <label asp-for="Materno"></label>
-                            <input asp-for="Materno" class="form-control" />
+                            <label asp-for="Paterno"></label>
+                            <input asp-for="Paterno" class="form-control" />
                         </div>
 
                         <div class="form-group">
-                            <label asp-for="Paterno"></label>
-                            <input asp-for="Paterno" class="form-control" />
+                            <label asp-for="Materno"></label>
+                            <input asp-for="Materno" class="form-control" />
                         </div>
 
                         <div class="form-group">
@@ -69,18 +69,13 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Especialidades</label>
-                            <div id="especialidades-container">
-                                <select name="EspecialidadesSeleccionadas" class="form-control mb-2">
-                                    @foreach (var item in Model.EspecialidadesDis)
-                                    {
-                                        <option value="@item.Value">@item.Text</option>
-                                    }
-                                </select>
-                            </div>
-                            <button type="button" id="agregar-especialidad" class="btn btn-sm btn-secondary">Agregar otra especialidad</button>
-                            <a asp-controller="Especialidad" asp-action="Create" class="btn btn-sm btn-link">Registrar nueva especialidad</a>
+                            <label asp-for="EspecialidadesSeleccionadas">Especialidades</label>
+                            <select asp-for="EspecialidadesSeleccionadas" asp-items="Model.EspecialidadesDisponibles" class="form-control" multiple size="5">
+                            </select>
+                            <small class="form-text text-muted">Puedes seleccionar múltiples opciones.</small>
+                            <a asp-controller="Especialidad" asp-action="Create" class="btn btn-sm btn-link mt-1">Registrar nueva especialidad</a>
                         </div>
+
 
 
                         <div class="form-group">

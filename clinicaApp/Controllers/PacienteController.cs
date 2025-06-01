@@ -9,10 +9,9 @@ using Microsoft.AspNetCore.Identity;
  Vistas del paciente
 1 .Todos los doctores, Index Medicos
 2 . crear una nueva cita
-3 . ver su expediente (consulta simple, no lo puede modificar)
+3 . ver su expediente (consulta simple, no lo puede modificar) y puede ver las citas futuras
 4 . cambiar datos erroneos (editar)
 5 .cambiar contraseña
-6 . consultar citas, proximas y pasadas (todas en la misma lista)
  
  */
 namespace clinicaApp.Controllers
@@ -51,9 +50,29 @@ namespace clinicaApp.Controllers
         }
 
 
-        public ActionResult Expediente() {
-            return View();
+        [Authorize(Roles = "Paciente")]
+        public async Task<IActionResult> Expediente()
+        {
+            var userId = _userManager.GetUserId(User);
+
+            var paciente = await _context.Pacientes
+                .Include(p => p.User)
+                .FirstOrDefaultAsync(p => p.UserId == userId);
+
+            if (paciente == null)
+                return NotFound();
+
+            var citas = await _context.Citas
+                .Include(c => c.Medico)
+                    .ThenInclude(m => m.User)
+                .Where(c => c.PacienteId == paciente.Id.ToString())
+                .ToListAsync();
+
+            ViewBag.Citas = citas;
+
+            return View(paciente);
         }
+
 
         public ActionResult Edit()
         {
@@ -61,11 +80,6 @@ namespace clinicaApp.Controllers
         } 
 
         public ActionResult CambiarContrasena()
-        {
-            return View();
-        }
-
-        public ActionResult CitasHechas()
         {
             return View();
         }

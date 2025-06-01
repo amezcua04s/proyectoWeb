@@ -16,5 +16,9 @@ namespace clinicaApp.Models
         public List<String> Cirugias { get; set; } = new List<String>();
         public List<String> Tratamientos { get; set; } = new List<String>();
 
+        //Para la relacion con citas
+        public ICollection<Cita> Citas { get; set; }
+
+
     }
 }

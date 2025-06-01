@@ -14,8 +14,12 @@ namespace clinicaApp.ViewModels
         public Sexo Sexo { get; set; }
         public DateTime Nacimiento { get; set; }
         public string CedulaProfesional { get; set; }
-        public List<string>? Especialidades { get; set; }
-        public List<SelectListItem> EspecialidadesDis { get; set; } = new();
+
+        //Lista de los id's de especialidades que estarán asociadas al doctor
+        public List<int>? EspecialidadesSeleccionadas { get; set; }
+
+        //Lista de las especialidades que existen registradas
+        public List<SelectListItem> EspecialidadesDisponibles { get; set; } = new();
 
 
         //Disponibilidad del medico, cada día tendra una lista de horas "disponibles"

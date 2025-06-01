@@ -15,7 +15,7 @@ namespace clinicaApp.Controllers
 
         public IActionResult Index()
         {
-            return RedirectToAction("Index", "Medico");
+            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
