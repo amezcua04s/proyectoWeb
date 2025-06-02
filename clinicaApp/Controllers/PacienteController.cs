@@ -22,7 +22,8 @@ namespace clinicaApp.Controllers
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly UserManager<ClinicaUser> _userManager;
 
-        public PacienteController(ClinicaAppDbContext context, IWebHostEnvironment webHostEnvironment, UserManager<ClinicaUser> userManager) {
+        public PacienteController(ClinicaAppDbContext context, IWebHostEnvironment webHostEnvironment, UserManager<ClinicaUser> userManager)
+        {
 
             _context = context;
             _webHostEnvironment = webHostEnvironment;
@@ -151,8 +152,6 @@ namespace clinicaApp.Controllers
         }
 
 
-
-
         [Authorize(Roles = "Paciente")]
         public async Task<IActionResult> Expediente()
         {
@@ -167,7 +166,7 @@ namespace clinicaApp.Controllers
 
             var citas = await _context.Citas
                 .Include(c => c.Medico)
-                    .ThenInclude(m => m.User)
+                .ThenInclude(m => m.User)
                 .Where(c => c.PacienteId == paciente.Id)
                 .ToListAsync();
 
@@ -176,6 +175,7 @@ namespace clinicaApp.Controllers
             return View(paciente);
         }
 
+        // **** ESTE ES EL MÉTODO QUE REDIRIGE AL CAMBIO DE CONTRASEÑA EN ACCOUNTCONTROLLER ****
         public async Task<IActionResult> CambiarContrasena()
         {
             return RedirectToAction("ChangePassword", "Account");

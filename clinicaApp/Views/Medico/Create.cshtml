@@ -21,7 +21,6 @@
 
                 <form asp-action="Create" enctype="multipart/form-data" method="post">
                     <div class="card-body">
-                        <!-- Datos personales -->
                         <div class="form-group">
                             <label asp-for="Nombre"></label>
                             <input asp-for="Nombre" class="form-control" />
@@ -84,7 +83,6 @@
                                 </div>
 
                                 <div class="form-group rangos-dia" id="rangos-@dia">
-                                    <!-- Aquí se insertarán los rangos por JS -->
                                     <button type="button" class="btn btn-sm btn-outline-primary agregar-rango" data-dia="@dia">+ Agregar rango</button>
                                     <input type="hidden" name="DisponibilidadesPorDia[@dia]" class="input-dia-final" />
                                     <small class="form-text text-muted">Selecciona rangos de horas, como 08:00-14:00,16:00-20:00</small>
@@ -110,7 +108,7 @@
 
 @section Scripts {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <link rel="stylesheet" href="~/css/flatpickrEstilos.css"/>
+    <link rel="stylesheet" href="~/css/flatpickrEstilos.css" />
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="~/js/disponibilidadMedico.js"></script>
     @await Html.PartialAsync("_ValidationScriptsPartial")

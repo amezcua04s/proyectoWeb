@@ -15,7 +15,7 @@ namespace clinicaApp.Controllers
         private readonly UserManager<ClinicaUser> _userManager;
         private readonly ClinicaAppDbContext _context;
 
-        public AccountController(ClinicaAppDbContext context ,SignInManager<ClinicaUser> signInManager, UserManager<ClinicaUser> userManager)
+        public AccountController(ClinicaAppDbContext context, SignInManager<ClinicaUser> signInManager, UserManager<ClinicaUser> userManager)
         {
             _signInManager = signInManager;
             _userManager = userManager;
@@ -43,25 +43,29 @@ namespace clinicaApp.Controllers
 
                 if (roles.Contains("Administrador"))
                 {
-                    
+
                     return RedirectToAction("Index", "Admin");
 
-                } else if (roles.Contains("Doctor")) {
+                }
+                else if (roles.Contains("Doctor"))
+                {
 
                     return RedirectToAction("VistaInicial", "Medico");
 
                 }
-                    //si no es administrador ni doctor por el momento lo llevamos al home normal
-                    return RedirectToAction("Index", "Home");
+                //si no es administrador ni doctor por el momento lo llevamos al home normal
+                return RedirectToAction("Index", "Home");
             }
 
+            // **** Esta línea añade el error genérico para credenciales inválidas ****
             ModelState.AddModelError(string.Empty, "Credenciales inválidas");
             return View(model);
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Register() {
+        public IActionResult Register()
+        {
             return View();
         }
 
@@ -72,7 +76,12 @@ namespace clinicaApp.Controllers
             if (!ModelState.IsValid)
                 return View(registerModel);
 
-            if (!registerModel.Correo.Equals(registerModel.ConfirmCorreo)) {
+            if (!registerModel.Correo.Equals(registerModel.ConfirmCorreo))
+            {
+                // Si la confirmación de correo no coincide, aquí no se añade un mensaje a ModelState.
+                // Para que un mensaje aparezca, se necesitaría una línea como:
+                // ModelState.AddModelError("ConfirmCorreo", "Los correos electrónicos no coinciden.");
+                // O un error general: ModelState.AddModelError(string.Empty, "Los correos electrónicos no coinciden.");
                 return View(registerModel);
             }
 
@@ -117,6 +126,8 @@ namespace clinicaApp.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
+            // **** Este bucle añade los errores de Identity result.Errors al ModelState ****
+            // Estos errores incluyen, por ejemplo, los de complejidad de contraseña (demasiado corta, falta un dígito, etc.)
             foreach (var error in result.Errors)
                 ModelState.AddModelError(string.Empty, error.Description);
 
@@ -175,6 +186,9 @@ namespace clinicaApp.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
+            // **** Este bucle añade los errores de Identity result.Errors al ModelState ****
+            // Estos errores pueden incluir: "Contraseña actual incorrecta",
+            // "Nueva contraseña no cumple requisitos", etc.
             foreach (var error in result.Errors)
             {
                 ModelState.AddModelError(string.Empty, error.Description);
@@ -182,8 +196,6 @@ namespace clinicaApp.Controllers
 
             return View(model);
         }
-
-
 
 
         [Authorize]
