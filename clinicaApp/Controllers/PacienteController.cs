@@ -35,7 +35,7 @@ namespace clinicaApp.Controllers
             return RedirectToAction("Index", "Medico"); //Este index debe regresar hacia el index normal de los doctores
         }
 
-        public async Task<IActionResult> CrearCita(int id) //recibe el id del medico para mostrarlo en
+        public async Task<IActionResult> CrearCita(int id)
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null) return RedirectToAction("Login", "Account");
@@ -43,10 +43,15 @@ namespace clinicaApp.Controllers
             var medico = await _context.Medicos
                 .Include(m => m.User)
                 .Include(m => m.Disponibilidades)
+                .Include(m => m.MedicoEspecialidades)
+                    .ThenInclude(me => me.Especialidad)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (medico == null) return NotFound();
 
+            medico.Especialidades = medico.MedicoEspecialidades
+                .Select(me => me.Especialidad.Nombre)
+                .ToList();
 
             return View(medico);
         }
@@ -169,12 +174,6 @@ namespace clinicaApp.Controllers
             ViewBag.Citas = citas;
 
             return View(paciente);
-        }
-
-
-        public ActionResult Edit()
-        {
-            return View();
         }
 
         public async Task<IActionResult> CambiarContrasena()

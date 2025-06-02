@@ -94,47 +94,72 @@ namespace clinicaApp.Controllers
             return RedirectToAction(nameof(IndexAdmin));
         }
 
-
-        // GET: EspecialidadController/Edit/5
-        public ActionResult Edit(int id)
+        [Authorize(Roles = "Administrador")]
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
         {
-            return View();
+            var especialidad = await _context.Especialidades.FindAsync(id);
+            if (especialidad == null) return NotFound();
+
+            var model = new EspecialidadEditViewModel
+            {
+                Id = especialidad.Id,
+                Nombre = especialidad.Nombre,
+                Descripcion = especialidad.Descripcion
+            };
+
+            return View(model);
         }
 
-        // POST: EspecialidadController/Edit/5
+
+
+        [Authorize(Roles = "Administrador")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> Edit(int id, EspecialidadEditViewModel model)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            if (id != model.Id) return NotFound();
+
+            if (!ModelState.IsValid) return View(model);
+
+            var especialidadDb = await _context.Especialidades.FindAsync(id);
+            if (especialidadDb == null) return NotFound();
+
+            especialidadDb.Nombre = model.Nombre;
+            especialidadDb.Descripcion = model.Descripcion;
+
+            _context.Update(especialidadDb);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(IndexAdmin));
         }
 
-        // GET: EspecialidadController/Delete/5
-        public ActionResult Delete(int id)
+
+
+        [Authorize(Roles = "Administrador")]
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
         {
-            return View();
+            var especialidad = await _context.Especialidades
+                .Include(e => e.MedicoEspecialidades)
+                .FirstOrDefaultAsync(e => e.Id == id);
+
+            if (especialidad == null)
+                return NotFound();
+
+            // Verifica si hay médicos vinculados antes de eliminar
+            if (especialidad.MedicoEspecialidades != null && especialidad.MedicoEspecialidades.Any())
+            {
+                TempData["Error"] = "No se puede eliminar la especialidad porque tiene médicos asociados.";
+                return RedirectToAction(nameof(IndexAdmin));
+            }
+
+            _context.Especialidades.Remove(especialidad);
+            await _context.SaveChangesAsync();
+
+            TempData["Success"] = "Especialidad eliminada correctamente.";
+            return RedirectToAction(nameof(IndexAdmin));
         }
 
-        // POST: EspecialidadController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
     }
 }

@@ -156,14 +156,17 @@ namespace clinicaApp.Controllers
                 // Redirigir según rol
                 if (await _userManager.IsInRoleAsync(user, "Paciente"))
                 {
+                    TempData["Success"] = "Contraseña cambiada correctamente.";
                     return RedirectToAction("Index", "Paciente");
                 }
                 else if (await _userManager.IsInRoleAsync(user, "Doctor"))
                 {
+                    TempData["Success"] = "Contraseña cambiada correctamente.";
                     return RedirectToAction("VistaInicial", "Medico");
                 }
                 else if (await _userManager.IsInRoleAsync(user, "Administrador"))
                 {
+                    TempData["Success"] = "Contraseña cambiada correctamente.";
                     return RedirectToAction("IndexAdmin", "Medico");
                 }
 

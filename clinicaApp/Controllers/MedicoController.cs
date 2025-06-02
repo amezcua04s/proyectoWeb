@@ -39,11 +39,22 @@ namespace clinicaApp.Controllers
         {
             var medicos = await _context.Medicos
                 .Include(m => m.User)
+                .Include(m => m.MedicoEspecialidades)
+                    .ThenInclude(me => me.Especialidad)
                 .Where(m => m.User.Activo == true)
                 .ToListAsync();
 
+            // Rellenar propiedad auxiliar de nombres de especialidades
+            foreach (var m in medicos)
+            {
+                m.Especialidades = m.MedicoEspecialidades
+                    .Select(me => me.Especialidad.Nombre)
+                    .ToList();
+            }
+
             return View(medicos);
         }
+
 
         [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> IndexBaja()

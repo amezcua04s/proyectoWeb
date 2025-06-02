@@ -6,6 +6,15 @@
 }
 
 <div class="container mt-4">
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+
     <h2 class="mb-4">Listado de Médicos</h2>
     <a asp-action="Create" class="btn btn-primary mb-3">Registrar Médico</a>
 

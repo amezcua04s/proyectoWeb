@@ -7,6 +7,15 @@
 
 <div class="container mt-4">
     <h2 class="mb-4">Listado de Especialidades</h2>
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+
     <a asp-action="Create" class="btn btn-primary mb-3">Registrar Especialidad</a>
 
     <!-- Tabla para pantallas medianas o grandes -->
