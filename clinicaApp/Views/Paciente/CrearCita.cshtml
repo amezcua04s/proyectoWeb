@@ -28,26 +28,31 @@
         <div class="col-md-8">
             <h4 class="mb-3">Horarios disponibles</h4>
             <div class="d-flex flex-wrap gap-2">
-                @foreach (var hora in Model.Disponibilidades)
+                @foreach (var hora in Model.Disponibilidades.OrderBy(d => d.DiaDeLaSemana).ThenBy(d => d.HoraInicio))
                 {
-                    <button class="btn btn-outline-primary">@hora</button>
+                    <button class="btn btn-outline-primary" disabled>
+                        @($"{hora.DiaDeLaSemana} {hora.HoraInicio:hh\\:mm}")
+                    </button>
                 }
             </div>
 
+
             <hr class="my-4" />
 
-            <form method="post" asp-action="ConfirmarCita">
+            <form method="post" asp-action="CitaCreation" asp-controller="Paciente">
                 <input type="hidden" name="medicoId" value="@Model.Id" />
 
                 <div class="form-group mt-3">
                     <label for="Horario">Selecciona horario:</label>
                     <select class="form-control" name="Horario" required>
                         <option disabled selected>Seleccione un horario</option>
-                        @foreach (var h in Model.Disponibilidades)
+                        @foreach (var hora in Model.Disponibilidades.OrderBy(d => d.DiaDeLaSemana).ThenBy(d => d.HoraInicio))
                         {
-                            <option value="@h">@h</option>
+                            var valor = $"{hora.DiaDeLaSemana} {hora.HoraInicio:hh\\:mm}";
+                            <option value="@valor">@valor</option>
                         }
                     </select>
+
                 </div>
 
                 <button type="submit" class="btn btn-success mt-3">Agendar Cita</button>

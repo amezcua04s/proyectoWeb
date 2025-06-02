@@ -5,6 +5,10 @@
 @{
     var user = await UserManager.GetUserAsync(User);
     var nombreCompleto = user != null ? $"{user.Nombre} {user.Materno}" : "Invitado";
+    nombreCompleto += user != null ? User.IsInRole("(Administrador)") ? "Admin" 
+        : User.IsInRole("(Doctor)") ? " Doctor" 
+            : User.IsInRole("(Paciente)") ? " Paciente" : ""
+    : "";
 }
 
 <!DOCTYPE html>
@@ -46,17 +50,28 @@
                             else if (User.IsInRole("Doctor"))
                             {
                                 var nombre = User.FindFirst("Nombre");
-                            } else 
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Página principal</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Medico" asp-action="VistaInicial">Citas pendientes</a>
+                                </li>
+                            }
+                            else if (User.IsInRole("Paciente"))
                             {
+                                
                                 var nombre = User.FindFirst("Nombre");
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Paciente" asp-action="Index">Agenda una cita</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Paciente" asp-action="Citas">Citas agendadas</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Paciente" asp-action="CitasProgramadas">Citas agendadas</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Paciente" asp-action="Expediente">Consultar "Mi expediente"</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Paciente" asp-action="CambiarContrasena">Cambiar contraseña</a>
                                 </li>
                             }
 

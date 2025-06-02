@@ -4,6 +4,8 @@ using clinicaApp.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace clinicaApp.Controllers
 {
@@ -41,12 +43,12 @@ namespace clinicaApp.Controllers
 
                 if (roles.Contains("Administrador"))
                 {
-
+                    
                     return RedirectToAction("Index", "Admin");
 
                 } else if (roles.Contains("Doctor")) {
 
-                    return RedirectToAction("Index", "Doctor");
+                    return RedirectToAction("VistaInicial", "Medico");
 
                 }
                     //si no es administrador ni doctor por el momento lo llevamos al home normal
@@ -120,6 +122,65 @@ namespace clinicaApp.Controllers
 
             return View(registerModel);
         }
+
+        [HttpGet]
+        [Authorize]
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> ChangePassword(CambioContraseñaViewModel model)
+        {
+            if (!ModelState.IsValid) return View(model);
+
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return RedirectToAction("Login");
+
+            var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+
+            if (result.Succeeded)
+            {
+                TempData["Success"] = "Contraseña actualizada correctamente.";
+
+                // Marcar primerInicio como false si es doctor
+                var medico = await _context.Medicos.FirstOrDefaultAsync(m => m.UserId == user.Id);
+                if (medico != null && medico.primerInicio)
+                {
+                    medico.primerInicio = false;
+                    await _context.SaveChangesAsync();
+                }
+
+                // Redirigir según rol
+                if (await _userManager.IsInRoleAsync(user, "Paciente"))
+                {
+                    return RedirectToAction("Index", "Paciente");
+                }
+                else if (await _userManager.IsInRoleAsync(user, "Doctor"))
+                {
+                    return RedirectToAction("VistaInicial", "Medico");
+                }
+                else if (await _userManager.IsInRoleAsync(user, "Administrador"))
+                {
+                    return RedirectToAction("IndexAdmin", "Medico");
+                }
+
+                // Si no tiene un rol conocido, cerrar sesión
+                await _signInManager.SignOutAsync();
+                return RedirectToAction("Login", "Account");
+            }
+
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+
+            return View(model);
+        }
+
+
 
 
         [Authorize]

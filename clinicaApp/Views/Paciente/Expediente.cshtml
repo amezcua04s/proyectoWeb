@@ -63,7 +63,7 @@
     <div class="card mb-5 shadow">
         <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
             <span>Citas Médicas</span>
-            <a asp-controller="Cita" asp-action="Create" class="btn btn-light btn-sm">Agendar Nueva Cita</a>
+            <a asp-controller="Cita" asp-action="Create" class="btn btn-secondary btn-sm">Agendar Nueva Cita</a>
         </div>
         <div class="card-body">
             @if (ViewBag.Citas is List<clinicaApp.Models.Cita> citas && citas.Any())

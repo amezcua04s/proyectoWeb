@@ -19,6 +19,10 @@ namespace clinicaApp.Models
         //Para la relacion con citas
         public ICollection<Cita> Citas { get; set; }
 
+        //Para la relacion con expediente
+        public Expediente Expediente { get; set; }
+
+
 
     }
 }

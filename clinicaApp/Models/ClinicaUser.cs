@@ -14,7 +14,6 @@ namespace clinicaApp.Models
         public Sexo Sexo { get; set; } = Sexo.OTRO;
         public bool Activo { get; set; } = true;
         public DateTime Registro { get; set; } = DateTime.Now;
-        public DateTime? Modificacion { get; set; }
 
     }
 }

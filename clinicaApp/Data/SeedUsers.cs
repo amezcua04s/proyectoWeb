@@ -18,7 +18,7 @@ namespace clinicaApp.Data
                     await roleManager.CreateAsync(new IdentityRole(role));
             }
 
-            // Crear usuario administrador por defecto
+            // Crear usuario administrador
             string adminEmail = "admin@clinica.com";
             string password = "cl1nic.Admin";
 

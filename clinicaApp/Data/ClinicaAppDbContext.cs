@@ -45,7 +45,7 @@ namespace clinicaApp.Data
             // medico - cita
             modelBuilder.Entity<Cita>()
                 .HasOne(c => c.Medico)
-                .WithMany() // Sin propiedad de navegación inversa
+                .WithMany(m => m.Citas) 
                 .HasForeignKey(c => c.MedicoId)
                 .OnDelete(DeleteBehavior.Restrict);
 
@@ -54,6 +54,21 @@ namespace clinicaApp.Data
                 .WithMany(p => p.Citas)
                 .HasForeignKey(c => c.PacienteId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            //disponibilidad - medico
+            modelBuilder.Entity<Disponibilidad>()
+                .HasOne(d => d.Medico)
+                .WithMany(m => m.Disponibilidades)
+                .HasForeignKey(d => d.MedicoId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            //Expediente paciente
+            modelBuilder.Entity<Expediente>()
+                .HasOne(e => e.Paciente)
+                .WithOne(p => p.Expediente)
+                .HasForeignKey<Expediente>(e => e.PacienteId)
+                .OnDelete(DeleteBehavior.Cascade);
+
         }
 
     }

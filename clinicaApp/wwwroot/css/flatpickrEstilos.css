@@ -1,0 +1,33 @@
+﻿/* Agrandar inputs de hora */
+.flatpickr-time.input {
+    font-size: 1.1rem;
+}
+
+.rango-horario input.flatpickr-time {
+    min-width: 150px;
+    height: 45px;
+    font-size: 1rem;
+    text-align: center;
+}
+
+.rango-horario .input-group-text {
+    font-size: 1.1rem;
+    padding: 0.5rem 1rem;
+}
+
+/* Agrandar popup de flatpickr */
+.flatpickr-calendar {
+    font-size: 1.1rem;
+}
+
+/* Espaciado general */
+.rango-horario {
+    margin-bottom: 1.5rem;
+}
+
+/* Opcional: botón agregar rango más notorio */
+.agregar-rango {
+    margin-top: 0.5rem;
+    padding: 6px 12px;
+    font-size: 0.95rem;
+}

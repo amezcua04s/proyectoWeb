@@ -15,6 +15,18 @@ namespace clinicaApp.Controllers
         private readonly IWebHostEnvironment _env;
         private readonly UserManager<ClinicaUser> _userManager;
 
+        private static readonly Dictionary<string, Dias> MapeoDias = new()
+        {
+            { "Lunes", Dias.LUNES },
+            { "Martes", Dias.MARTES },
+            { "Miércoles", Dias.MIERCOLES },
+            { "Jueves", Dias.JUEVES },
+            { "Viernes", Dias.VIERNES },
+            { "Sábado", Dias.SABADO },
+            { "Domingo", Dias.DOMINGO }
+        };
+
+
         public MedicoController(ClinicaAppDbContext context, IWebHostEnvironment env, UserManager<ClinicaUser> userManager)
         {
             _context = context;
@@ -139,10 +151,6 @@ namespace clinicaApp.Controllers
 
             await _userManager.AddToRoleAsync(user, "Doctor");
 
-            var disponibilidades = model.DisponibilidadesPorDia
-                .SelectMany(d => d.Value.Select(h => $"{d.Key} {h}"))
-                .ToList();
-
             string rutaFoto = "/images/default_doctor.png";
             if (model.Foto != null)
             {
@@ -161,10 +169,13 @@ namespace clinicaApp.Controllers
                 Nacimiento = model.Nacimiento,
                 CedulaProfesional = model.CedulaProfesional,
                 Foto = rutaFoto,
-                Disponibilidades = disponibilidades
             };
 
             _context.Medicos.Add(medico);
+            await _context.SaveChangesAsync(); //Guarda el medico en la BD para generarle un ID
+
+            var disponibilidades = ProcesarDisponibilidades(model.DisponibilidadesPorDia, medico.Id);
+            _context.Disponibilidades.AddRange(disponibilidades);
             await _context.SaveChangesAsync();
 
             if (model.EspecialidadesSeleccionadas != null && model.EspecialidadesSeleccionadas.Any())
@@ -192,9 +203,20 @@ namespace clinicaApp.Controllers
                 .Include(m => m.User)
                 .Include(m => m.MedicoEspecialidades)
                     .ThenInclude(me => me.Especialidad)
+                .Include(m => m.Disponibilidades)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (medico == null) return NotFound();
+
+            // Agrupar por día, y para cada día generar texto: "08:00-12:00,16:00-18:00"
+            var disponibilidadesPorDia = medico.Disponibilidades
+                .GroupBy(d => d.DiaDeLaSemana)
+                .ToDictionary(
+                    g => g.Key.ToString().ToUpper()[..1] + g.Key.ToString().ToLower()[1..], // Ej: "Lunes"
+                    g => string.Join(",", g.OrderBy(d => d.HoraInicio)
+                                          .Chunk(1)
+                                          .Select(c => $"{c.First().HoraInicio:hh\\:mm}-{c.First().HoraFin:hh\\:mm}"))
+                );
 
             var model = new MedicoEditViewModel
             {
@@ -209,20 +231,15 @@ namespace clinicaApp.Controllers
                 Nacimiento = medico.Nacimiento,
                 FotoActual = medico.Foto,
                 EspecialidadesSeleccionadas = medico.MedicoEspecialidades
-                                               .Select(me => me.EspecialidadId)
-                                               .ToList(),
+                                                   .Select(me => me.EspecialidadId)
+                                                   .ToList(),
                 EspecialidadesDisponibles = await _context.Especialidades
                     .Select(e => new SelectListItem
                     {
                         Value = e.Id.ToString(),
                         Text = e.Nombre
                     }).ToListAsync(),
-                DisponibilidadesPorDia = medico.Disponibilidades
-                    .GroupBy(d => d.Split(" ")[0]) // Día
-                    .ToDictionary(
-                        g => g.Key,
-                        g => g.Select(d => d.Split(" ")[1]).ToList() // Horas
-                    )
+                DisponibilidadesPorDia = disponibilidadesPorDia
             };
 
             return View(model);
@@ -297,9 +314,16 @@ namespace clinicaApp.Controllers
             }
 
             // Actualizar disponibilidades
-            medicoDb.Disponibilidades = model.DisponibilidadesPorDia
-                .SelectMany(d => d.Value.Select(h => $"{d.Key} {h}"))
-                .ToList();
+            // Eliminar disponibilidades antiguas
+            var disponibilidadesActuales = await _context.Disponibilidades
+                .Where(d => d.MedicoId == medicoDb.Id)
+                .ToListAsync();
+            _context.Disponibilidades.RemoveRange(disponibilidadesActuales);
+
+            // Agregar nuevas
+            var nuevasDisponibilidades = ProcesarDisponibilidades(model.DisponibilidadesPorDia, medicoDb.Id);
+            _context.Disponibilidades.AddRange(nuevasDisponibilidades);
+
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(IndexAdmin));
@@ -321,5 +345,131 @@ namespace clinicaApp.Controllers
 
             return RedirectToAction(nameof(IndexAdmin));
         }
+        private List<Disponibilidad> ProcesarDisponibilidades(Dictionary<string, string> horarios, int medicoId)
+        {
+            var lista = new List<Disponibilidad>();
+
+            foreach (var entrada in horarios)
+            {
+                if (string.IsNullOrWhiteSpace(entrada.Value)) continue;
+
+                if (!MapeoDias.TryGetValue(entrada.Key, out var dia)) continue;
+
+                var bloques = entrada.Value.Split(',', StringSplitOptions.RemoveEmptyEntries);
+
+                foreach (var bloque in bloques)
+                {
+                    var partes = bloque.Split('-', StringSplitOptions.RemoveEmptyEntries);
+                    if (partes.Length != 2) continue;
+
+                    if (TimeSpan.TryParse(partes[0].Trim(), out var inicio) &&
+                        TimeSpan.TryParse(partes[1].Trim(), out var fin))
+                    {
+                        for (var hora = inicio; hora < fin; hora = hora.Add(TimeSpan.FromHours(1)))
+                        {
+                            lista.Add(new Disponibilidad
+                            {
+                                MedicoId = medicoId,
+                                DiaDeLaSemana = dia,
+                                HoraInicio = hora,
+                                HoraFin = hora.Add(TimeSpan.FromHours(1)),
+                                EstaOcupado = false
+                            });
+                        }
+                    }
+                }
+            }
+
+            return lista;
+        }
+
+        [Authorize(Roles = "Doctor")]
+        public async Task<IActionResult> VistaInicial()
+        {
+            
+
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return RedirectToAction("Login", "Account");
+
+            var medico = await _context.Medicos
+                .Include(m => m.Citas.Where(c => c.FechaHora >= DateTime.Now))
+                    .ThenInclude(c => c.Paciente)
+                        .ThenInclude(p => p.User)
+                .Include(m => m.Citas)
+                    .ThenInclude(c => c.Paciente)
+                        .ThenInclude(p => p.Expediente)
+                .FirstOrDefaultAsync(m => m.UserId == user.Id);
+
+            if (medico == null) return NotFound();
+
+            if (medico.primerInicio)
+            {
+                return RedirectToAction("ChangePassword", "Account");
+            }
+
+            var citasProximas = medico.Citas
+                .Where(c => c.Estado == EstadoCita.Pendiente)
+                .OrderBy(c => c.FechaHora)
+                .ToList();
+
+            return View("VistaInicial", citasProximas);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Doctor")]
+        public async Task<IActionResult> AgregarNota(int citaId, string nota)
+        {
+            var cita = await _context.Citas.FirstOrDefaultAsync(c => c.Id == citaId);
+            if (cita == null) return NotFound();
+
+            cita.Notas = nota;
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("VistaInicial");
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Doctor")]
+        public async Task<IActionResult> ActualizarExpediente(int pacienteId, string alergia, string medicamento, string enfermedad, string tratamiento)
+        {
+            var paciente = await _context.Pacientes
+                .Include(p => p.Expediente)
+                .FirstOrDefaultAsync(p => p.Id == pacienteId);
+
+            if (paciente == null) return NotFound();
+
+            // Crear expediente si no tiene
+            if (paciente.Expediente == null)
+            {
+                paciente.Expediente = new Expediente
+                {
+                    PacienteId = paciente.Id,
+                    FechaCreacion = DateTime.Now,
+                    FechaModificacion = DateTime.Now
+                };
+                _context.Expedientes.Add(paciente.Expediente);
+            }
+            else
+            {
+                paciente.Expediente.FechaModificacion = DateTime.Now;
+            }
+
+            if (!string.IsNullOrWhiteSpace(alergia) && !paciente.Alergias.Contains(alergia))
+                paciente.Alergias.Add(alergia);
+
+            if (!string.IsNullOrWhiteSpace(medicamento) && !paciente.Medicamentos.Contains(medicamento))
+                paciente.Medicamentos.Add(medicamento);
+
+            if (!string.IsNullOrWhiteSpace(enfermedad) && !paciente.Enfermedades.Contains(enfermedad))
+                paciente.Enfermedades.Add(enfermedad);
+
+            if (!string.IsNullOrWhiteSpace(tratamiento) && !paciente.Tratamientos.Contains(tratamiento))
+                paciente.Tratamientos.Add(tratamiento);
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction("VistaInicial", "Medico");
+        }
+
+
     }
 }
