@@ -32,8 +32,6 @@ namespace clinicaApp.ViewModels
             { "Sábado", "" },
             { "Domingo", "" }
         };
-
-
         public IFormFile? Foto { get; set; }
 
     }

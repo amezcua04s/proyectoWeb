@@ -20,8 +20,11 @@
 
     <!-- Tabla para pantallas medianas o grandes -->
     <div class="d-none d-md-block">
-        <div class="table-responsive">
-            <table class="table table-bordered align-middle">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="table-responsive">
+                    <table class="table table-bordered align-middle shadow-sm rounded">
+
                 <thead class="table-dark">
                     <tr>
                         <th>Nombre</th>
@@ -36,9 +39,9 @@
                             <td>@item.Nombre</td>
                             <td>@item.Descripcion</td>
                             <td>
-                                <div class="d-flex gap-2">
-                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Editar</a>
-                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger" onclick="return confirm('¿Desea eliminar esta especialidad?')">Eliminar</a>
+                                <div class="d-flex justify-content-start gap-2 flex-wrap">
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning mt-1">Editar</a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger mt-1 " onclick="return confirm('¿Desea eliminar esta especialidad?')">Eliminar</a>
                                 </div>
                             </td>
                         </tr>

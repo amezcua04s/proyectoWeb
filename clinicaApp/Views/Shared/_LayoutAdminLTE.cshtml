@@ -57,48 +57,59 @@
             </a>
 
             <div class="sidebar">
-                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                    <div class="info">
-                        <a asp-controller="Home" asp-action="Index" class="nav-link">
-                            <i class="fa fa-home"></i> Página principal
-                        </a>
-                    </div>
-                </div>
 
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
+
+                        <!-- Página principal -->
+                        <li class="nav-item">
+                            <a asp-controller="Home" asp-action="Index" class="nav-link">
+                                <i class="nav-icon fas fa-home"></i>
+                                <p>Página principal</p>
+                            </a>
+                        </li>
+
+                        <hr class="bg-secondary my-2" />
+
+                        <!-- Médico -->
                         <li class="nav-item">
                             <a asp-controller="Medico" asp-action="Create" class="nav-link">
-                                <i class="nav-icon fas fa-plus"></i>
+                                <i class="nav-icon fas fa-user-plus"></i>
                                 <p>Registrar Médico</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a asp-controller="Medico" asp-action="IndexAdmin" class="nav-link">
-                                <i class="nav-icon fas fa-th-list"></i>
+                                <i class="nav-icon fas fa-user-md"></i>
                                 <p>Ver Médicos</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-action="IndexBaja" asp-controller="Medico">
-                                <i class="fas fa-user-slash"></i>
+                                <i class="nav-icon fas fa-user-slash"></i>
                                 <p>Médicos dados de baja</p>
                             </a>
                         </li>
+
+                        <hr class="bg-secondary my-2" />
+
+                        <!-- Especialidades -->
                         <li class="nav-item">
                             <a asp-controller="Especialidad" asp-action="Create" class="nav-link">
-                                <i class="nav-icon fas fa-plus"></i>
+                                <i class="nav-icon fas fa-stethoscope"></i>
                                 <p>Registrar especialidad</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a asp-controller="Especialidad" asp-action="IndexAdmin" class="nav-link">
-                                <i class="nav-icon fas fa-th-list"></i>
+                                <i class="nav-icon fas fa-list"></i>
                                 <p>Ver especialidades</p>
                             </a>
                         </li>
                     </ul>
                 </nav>
+
+
             </div>
         </aside>
 
