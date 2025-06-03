@@ -1,0 +1,140 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<clinicaApp.Models.ClinicaUser> UserManager
+@inject SignInManager<clinicaApp.Models.ClinicaUser> SignInManager
+
+@{
+    var user = await UserManager.GetUserAsync(User);
+    var nombreCompleto = user != null ? $"{user.Nombre} {user.Materno}" : "Invitado";
+    nombreCompleto += user != null ? User.IsInRole("(Administrador)") ? "Admin" 
+        : User.IsInRole("(Doctor)") ? " Doctor" 
+            : User.IsInRole("(Paciente)") ? " Paciente" : ""
+    : "";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - clinicaApp</title>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/clinicaApp.styles.css" asp-append-version="true" />
+    <link href="~/adminlte/plugins/fontawesome-free/css/all.min.css" rel="stylesheet" />
+    <link href="~/adminlte/dist/css/adminlte.min.css" rel="stylesheet" />
+
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">clinicaApp</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Página principal</a>
+                        </li>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            @if (User.IsInRole("Administrador"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Index">Dashboard Admin</a>
+                                </li>
+                            }
+                            else if (User.IsInRole("Doctor"))
+                            {
+                                var nombre = User.FindFirst("Nombre");
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Página principal</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Medico" asp-action="VistaInicial">Citas pendientes</a>
+                                </li>
+                            }
+                            else if (User.IsInRole("Paciente"))
+                            {
+                                
+                                var nombre = User.FindFirst("Nombre");
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Paciente" asp-action="Index">Agenda una cita</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Paciente" asp-action="CitasProgramadas">Citas agendadas</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Paciente" asp-action="Expediente">Consultar "Mi expediente"</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Paciente" asp-action="CambiarContrasena">Cambiar contraseña</a>
+                                </li>
+                            }
+
+                        }
+                        else 
+                        {
+
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Registrarse</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Iniciar sesión</a>
+                            </li>
+                        
+                        }
+                    </ul>
+
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-toggle="dropdown">
+                                <i class="fas fa-user"></i> @nombreCompleto
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <form asp-controller="Account" asp-action="Logout" method="post" class="dropdown-item">
+                                    <button type="submit" class="btn btn-link text-dark p-0 m-0" style="text-decoration: none;">
+                                        <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+                                    </button>
+                                </form>
+                            </div>
+                        </li>
+                    </ul>
+                
+                </div>
+            </div>
+
+        
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2025 - clinicaApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <!-- Scripts base -->
+    <script src="~/adminlte/plugins/jquery/jquery.min.js"></script>
+    <script src="~/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/adminlte/dist/js/adminlte.min.js"></script>
+
+    <!-- Renderizar scripts específicos de cada vista -->
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+

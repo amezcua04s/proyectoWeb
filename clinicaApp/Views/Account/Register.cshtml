@@ -1,0 +1,75 @@
+﻿@model clinicaApp.ViewModels.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Registrarse";
+    Layout = "_Layout";
+}
+
+<div class="container mt-5 pb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h3 class="mb-4 text-center">Crear nueva cuenta</h3>
+
+            <form asp-action="Register" method="post">
+                <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Nombre"></label>
+                    <input asp-for="Nombre" class="form-control" />
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Paterno"></label>
+                    <input asp-for="Paterno" class="form-control" />
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Materno"></label>
+                    <input asp-for="Materno" class="form-control" />
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Correo"></label>
+                    <input asp-for="Correo" class="form-control" />
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="ConfirmCorreo"></label>
+                    <input asp-for="ConfirmCorreo" class="form-control" />
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Contrasenia">Contaseña</label>
+                    <input asp-for="Contrasenia" class="form-control" type="password" />
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Telefono">Teléfono</label>
+                    <input asp-for="Telefono" class="form-control" />
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Sexo"></label>
+                    <select asp-for="Sexo" class="form-control" asp-items="Html.GetEnumSelectList<Sexo>()"></select>
+                </div>
+
+                <div class="form-group mb-4">
+                    <label asp-for="Nacimiento">Fecha de nacimiento</label>
+                    <input asp-for="Nacimiento" type="date" class="form-control" />
+                </div>
+                <hr />
+                <h5 class="text-center">Historial Médico</h5>
+
+                @foreach (var field in new[] { "Alergias", "Enfermedades", "Medicamentos", "Antecedentes", "Cirugias", "Tratamientos" })
+                {
+                    <div class="form-group mb-3">
+                        <label>@field</label>
+                        <textarea name="@field" class="form-control" rows="2" placeholder="Separadas por comas"></textarea>
+                    </div>
+                }
+
+                <button type="submit" class="btn btn-primary w-100">Registrarse</button>
+            </form>
+        </div>
+    </div>
+</div>

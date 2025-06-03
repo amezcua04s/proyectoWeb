@@ -1,0 +1,74 @@
+﻿@model List<clinicaApp.Models.Cita>
+
+@{
+    ViewData["Title"] = "Citas Programadas";
+    Layout = "_Layout";
+}
+
+<div class="container mt-4">
+    <h2>Citas Programadas</h2>
+    <hr />
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">No tienes citas programadas.</div>
+    }
+    else
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Médico</th>
+                    <th>Fecha y Hora</th>
+                    <th>Días restantes</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var cita in Model)
+                {
+                    var diasFaltantes = (cita.FechaHora.Date - DateTime.Today).Days;
+                    <tr>
+                        <td>@($"{cita.Medico.User.Nombre} {cita.Medico.User.Paterno} {cita.Medico.User.Materno}")</td>
+                        <td>@cita.FechaHora.ToString("dddd dd MMMM HH:mm")</td>
+                        <td>
+                            @if (diasFaltantes >= 0)
+                            {
+                                @($"{diasFaltantes} días")
+                            }
+                            else
+                            {
+                                <span class="text-muted">Ya ocurrió</span>
+                            }
+                        </td>
+                        <td>
+                            @cita.Estado
+                        </td>
+                        <td>
+                            @if (cita.Estado == clinicaApp.Models.EstadoCita.Pendiente)
+                            {
+                                <form asp-action="CancelarCita" asp-controller="Paciente" method="post" onsubmit="return confirm('¿Estás seguro de cancelar esta cita?');">
+                                    <input type="hidden" name="id" value="@cita.Id" />
+                                    <button class="btn btn-sm btn-danger" type="submit">Cancelar</button>
+                                </form>
+                            }
+                            else
+                            {
+                                <span class="text-muted">Sin acciones</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

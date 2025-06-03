@@ -1,0 +1,88 @@
+﻿@model IEnumerable<clinicaApp.Models.Medico>
+
+@{
+    ViewData["Title"] = "Médicos dados de baja";
+    Layout = "_LayoutAdminLTE";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4 text-danger">Médicos dados de baja</h2>
+    <a asp-action="IndexAdmin" class="btn btn-secondary mb-3">Volver al listado activo</a>
+
+    <!-- Tabla para pantallas medianas en adelante -->
+    <div class="table-responsive d-none d-md-block">
+        <table class="table table-bordered table-striped align-middle">
+            <thead class="table-danger">
+                <tr>
+                    <th>Foto</th>
+                    <th>Nombre</th>
+                    <th>Correo</th>
+                    <th>Teléfono</th>
+                    <th>Especialidad</th>
+                    <th>Cédula</th>
+                    <th>Sexo</th>
+                    <th>Fecha Nacimiento</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <img src="@item.Foto" class="img-thumbnail rounded-circle" style="width: 60px; height: 60px; object-fit: cover;" />
+                        </td>
+                        <td>@item.User.Nombre @item.User.Paterno @item.User.Materno</td>
+                        <td>@item.User.Email</td>
+                        <td>@item.User.Telefono</td>
+                        <td>
+                            @if (item.Especialidades != null && item.Especialidades.Any())
+                            {
+                                @string.Join(", ", item.Especialidades)
+                            }
+                            else
+                            {
+                                <span>No asignadas</span>
+                            }
+                        </td>
+                        <td>@item.CedulaProfesional</td>
+                        <td>@item.User.Sexo</td>
+                        <td>@item.Nacimiento.ToShortDateString()</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Cards para móviles -->
+    <div class="d-block d-md-none">
+        @foreach (var item in Model)
+        {
+            <div class="card mb-3 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <img src="@item.Foto" class="rounded-circle me-3" style="width: 60px; height: 60px; object-fit: cover;" />
+                        <div>
+                            <h5 class="mb-0">@item.User.Nombre @item.User.Paterno @item.User.Materno</h5>
+                            <small class="text-muted">@item.User.Email</small>
+                        </div>
+                    </div>
+                    <p><strong>Teléfono:</strong> @item.User.Telefono</p>
+                    <p>
+                        <strong>Especialidad:</strong>
+                        @if (item.Especialidades != null && item.Especialidades.Any())
+                        {
+                            @string.Join(", ", item.Especialidades)
+                        }
+                        else
+                        {
+                            <span>No asignadas</span>
+                        }
+                    </p>
+                    <p><strong>Cédula:</strong> @item.CedulaProfesional</p>
+                    <p><strong>Sexo:</strong> @item.User.Sexo</p>
+                    <p><strong>Fecha Nacimiento:</strong> @item.Nacimiento.ToShortDateString()</p>
+                </div>
+            </div>
+        }
+    </div>
+</div>

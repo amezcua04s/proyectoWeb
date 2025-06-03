@@ -1,0 +1,117 @@
+﻿@model clinicaApp.ViewModels.MedicoViewModel
+
+@{
+    ViewData["Title"] = "Registrar Médico";
+    Layout = "_LayoutAdminLTE";
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <h1>@ViewData["Title"]</h1>
+    </div>
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10">
+                <div class="card card-primary shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="card-title mb-0">Nuevo médico</h3>
+                    </div>
+
+                    <form asp-action="Create" enctype="multipart/form-data" method="post">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label asp-for="Nombre"></label>
+                                <input asp-for="Nombre" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Paterno"></label>
+                                <input asp-for="Paterno" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Materno"></label>
+                                <input asp-for="Materno" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Correo"></label>
+                                <input asp-for="Correo" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Contrasenia">Contraseña</label>
+                                <input asp-for="Contrasenia" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Telefono"></label>
+                                <input asp-for="Telefono" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Sexo"></label>
+                                <select asp-for="Sexo" class="form-control">
+                                    <option value="">Seleccione una opción</option>
+                                    @foreach (var item in Html.GetEnumSelectList<clinicaApp.Models.Sexo>())
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Nacimiento">Fecha de Nacimiento</label>
+                                <input asp-for="Nacimiento" type="date" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="EspecialidadesSeleccionadas">Especialidades</label>
+                                <select asp-for="EspecialidadesSeleccionadas" asp-items="Model.EspecialidadesDisponibles" class="form-control" multiple size="5">
+                                </select>
+                                <a asp-controller="Especialidad" asp-action="Create" class="btn btn-sm btn-link mt-1">Registrar nueva especialidad</a>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="CedulaProfesional">Cédula Profesional</label>
+                                <input asp-for="CedulaProfesional" class="form-control" />
+                            </div>
+
+                            <hr />
+                            <h5>Disponibilidad Horaria</h5>
+
+                            @foreach (var dia in Model.DisponibilidadesPorDia.Keys.ToList())
+                            {
+                                <div class="mb-3 border rounded p-3">
+                                    <strong>@dia</strong><br />
+                                    <div class="form-check form-switch mb-2">
+                                        <input class="form-check-input toggle-dia" type="checkbox" id="toggle-@dia" checked />
+                                        <label class="form-check-label">Disponible</label>
+                                    </div>
+
+                                    <div class="form-group rangos-dia" id="rangos-@dia">
+                                        <button type="button" class="btn btn-sm btn-outline-primary agregar-rango" data-dia="@dia">+ Agregar rango</button>
+                                        <input type="hidden" name="DisponibilidadesPorDia[@dia]" class="input-dia-final" />
+                                        <small class="form-text text-muted">Selecciona rangos de horas, como 08:00-14:00,16:00-20:00</small>
+                                    </div>
+                                </div>
+                            }
+
+                            <div class="form-group">
+                                <label asp-for="Foto"></label>
+                                <input asp-for="Foto" type="file" class="form-control-file" />
+                            </div>
+                        </div>
+
+                        <div class="card-footer d-flex justify-content-between">
+                            <button type="submit" class="btn btn-primary">Registrar</button>
+                            <a asp-controller="Admin" asp-action="Index" class="btn btn-secondary">Volver</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="~/css/flatpickrEstilos.css" />
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="~/js/disponibilidadMedico.js"></script>
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

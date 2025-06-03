@@ -1,0 +1,95 @@
+﻿@model List<clinicaApp.Models.Cita>
+
+@{
+    ViewData["Title"] = "Citas Próximas";
+    Layout = "_Layout";
+}
+
+<div class="container mt-4">
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+
+    <h2>Citas próximas</h2>
+    @if (!Model.Any())
+    {
+        <p>No tienes citas próximas.</p>
+    }
+    else
+    {
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Paciente</th>
+                    <th>Teléfono</th>
+                    <th>Horario</th>
+                    <th>Expediente</th>
+                    <th>Notas</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var cita in Model)
+                {
+                    var tiempoRestante = (cita.FechaHora - DateTime.Now).TotalHours;
+                    <tr>
+                        <td>@($"{cita.Paciente.User.Nombre} {cita.Paciente.User.Paterno}")</td>
+                        <td>@cita.Paciente.User.Telefono</td>
+                        <td>@cita.FechaHora.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>
+                            <strong>Alergias:</strong> @string.Join(", ", cita.Paciente.Alergias) <br />
+                            <strong>Medicamentos:</strong> @string.Join(", ", cita.Paciente.Medicamentos) <br />
+                            <strong>Padecimientos:</strong> @string.Join(", ", cita.Paciente.Enfermedades) <br />
+                            <strong>Tratamientos:</strong> @string.Join(", ", cita.Paciente.Tratamientos)
+                        </td>
+                        <td>
+                            @if (tiempoRestante <= 2)
+                            {
+                                <form method="post" asp-action="AgregarNota" asp-controller="Medico">
+                                    <input type="hidden" name="citaId" value="@cita.Id" />
+                                    <textarea name="nota" class="form-control mb-2" placeholder="Agregar nota...">@cita.Notas</textarea>
+                                    <button type="submit" class="btn btn-sm btn-primary">Guardar</button>
+                                </form>
+                            }
+                            else
+                            {
+                                @cita.Notas
+                                <br />
+                                <small class="text-muted fst-italic">Solo puedes agregar notas si la cita es en menos de 2 horas.</small>
+                            }
+                        </td>
+
+                        <td>
+                            <form method="post" asp-action="ActualizarExpediente" asp-controller="Medico">
+                                <input type="hidden" name="pacienteId" value="@cita.Paciente.Id" />
+                                <input type="text" name="alergia" class="form-control mb-1" placeholder="Nueva alergia" />
+                                <input type="text" name="medicamento" class="form-control mb-1" placeholder="Nuevo medicamento" />
+                                <input type="text" name="enfermedad" class="form-control mb-1" placeholder="Nuevo padecimiento" />
+                                <input type="text" name="tratamiento" class="form-control mb-1" placeholder="Nuevo tratamiento" />
+                                <button type="submit" class="btn btn-sm btn-success mt-1">Actualizar</button>
+                            </form>
+                        </td>
+                        <td>
+                            <form method="post" asp-action="CambiarEstadoCita" asp-controller="Medico">
+                                <input type="hidden" name="citaId" value="@cita.Id" />
+                                                        <select name="nuevoEstado" class="form-select form-select-sm mb-2">
+                                                            @foreach (EstadoCita estado in Enum.GetValues(typeof(EstadoCita)))
+                                                            {
+                                                                var selected = (estado == cita.Estado) ? "selected" : "";
+                                                                @Html.Raw($"<option value='{(int)estado}' {selected}>{estado}</option>")
+                                                            }
+                                                        </select>
+                                <button type="submit" class="btn btn-sm btn-secondary">Cambiar estado</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

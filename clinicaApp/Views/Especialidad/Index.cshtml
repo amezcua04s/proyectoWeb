@@ -1,0 +1,19 @@
+﻿@model IEnumerable<clinicaApp.Models.Especialidad>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Descripción</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var esp in Model)
+        {
+                <tr>
+                    <td>@esp.Nombre</td>
+                    <td>@esp.Descripcion</td>
+                </tr>
+        }
+    </tbody>
+</table>

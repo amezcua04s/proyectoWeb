@@ -1,0 +1,106 @@
+﻿@model IEnumerable<clinicaApp.Models.Medico>
+
+@{
+    ViewData["Title"] = "Médicos";
+    Layout = "_LayoutAdminLTE";
+}
+
+<div class="container mt-4">
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+
+    <h2 class="mb-4">Listado de Médicos</h2>
+    <a asp-action="Create" class="btn btn-primary mb-3">Registrar Médico</a>
+
+    <!-- Tabla para pantallas medianas o grandes -->
+    <div class="d-none d-md-block">
+        <div class="table-responsive">
+            <table class="table table-bordered align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Foto</th>
+                        <th>Nombre Completo</th>
+                        <th>Correo</th>
+                        <th>Teléfono</th>
+                        <th>Sexo</th>
+                        <th>Fecha de Nacimiento</th>
+                        <th>Especialidades</th>
+                        <th>Cédula Profesional</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <img src="@item.Foto" class="img-thumbnail rounded-circle" style="width: 60px; height: 60px; object-fit: cover;" />
+                            </td>
+                            <td>@item.User.Nombre @item.User.Paterno @item.User.Materno</td>
+                            <td>@item.User.Email</td>
+                            <td>@item.User.Telefono</td>
+                            <td>@item.User.Sexo</td>
+                            <td>@item.Nacimiento.ToShortDateString()</td>
+                            <td>
+                                @if (item.Especialidades != null && item.Especialidades.Any())
+                                {
+                                    @string.Join(", ", item.Especialidades)
+                                }
+                                else
+                                {
+                                    <span>No asignadas</span>
+                                }
+                            </td>
+                            <td>@item.CedulaProfesional</td>
+                            <td>
+                                <div class="d-flex gap-2">
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Editar</a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger" onclick="return confirm('¿Desea eliminar este médico?')">Eliminar</a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Vista tipo card para móviles -->
+    <div class="d-block d-md-none">
+        @foreach (var item in Model)
+        {
+            <div class="card mb-3 shadow-sm">
+                <div class="card-body text-center">
+                    <img src="@item.Foto" class="rounded-circle mb-3" style="width: 100px; height: 100px; object-fit: cover;" />
+                    <h5 class="card-title">@item.User.Nombre @item.User.Paterno @item.User.Materno</h5>
+                    <p class="card-text"><strong>Correo:</strong> @item.User.Email</p>
+                    <p class="card-text"><strong>Teléfono:</strong> @item.User.Telefono</p>
+                    <p class="card-text"><strong>Sexo:</strong> @item.User.Sexo</p>
+                    <p class="card-text"><strong>Nacimiento:</strong> @item.Nacimiento.ToShortDateString()</p>
+                    <p class="card-text">
+                        <strong>Especialidades:</strong>
+                        @if (item.Especialidades != null && item.Especialidades.Any())
+                        {
+                            @string.Join(", ", item.Especialidades)
+                        }
+                        else
+                        {
+                            <span>No asignadas</span>
+                        }
+                    </p>
+                    <p class="card-text"><strong>Cédula:</strong> @item.CedulaProfesional</p>
+                    <div class="d-flex justify-content-center gap-2">
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Editar</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger" onclick="return confirm('¿Desea eliminar este médico?')">Eliminar</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,141 @@
+﻿@model clinicaApp.ViewModels.MedicoEditViewModel
+
+@{
+    ViewData["Title"] = "Editar Médico";
+    Layout = "_LayoutAdminLTE";
+}
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <h1>@ViewData["Title"]</h1>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">Editar Médico</h3>
+                </div>
+
+                <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                    <div class="card-body">
+                        <input type="hidden" asp-for="Id" />
+
+                        <div class="form-group">
+                            <label asp-for="Nombre"></label>
+                            <input asp-for="Nombre" class="form-control" />
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Paterno"></label>
+                            <input asp-for="Paterno" class="form-control" />
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Materno"></label>
+                            <input asp-for="Materno" class="form-control" />
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Telefono"></label>
+                            <input asp-for="Telefono" class="form-control" />
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Correo"></label>
+                            <input asp-for="Correo" class="form-control" />
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Sexo"></label>
+                            <select asp-for="Sexo" class="form-control">
+                                @foreach (var sexo in Enum.GetValues(typeof(clinicaApp.Models.Sexo)))
+                                {
+                                    <option value="@sexo" selected="@(Model.Sexo == (clinicaApp.Models.Sexo)sexo)">
+                                        @sexo
+                                    </option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="EspecialidadesSeleccionadas">Especialidades</label>
+                            <select asp-for="EspecialidadesSeleccionadas" asp-items="Model.EspecialidadesDisponibles" class="form-control" multiple size="5">
+                            </select>
+                            <small class="form-text text-muted">Puedes seleccionar múltiples opciones.</small>
+                            <a asp-controller="Especialidad" asp-action="Create" class="btn btn-sm btn-link mt-1">Registrar nueva especialidad</a>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="CedulaProfesional"></label>
+                            <input asp-for="CedulaProfesional" class="form-control" />
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Nacimiento"></label>
+                            <input asp-for="Nacimiento" type="date" class="form-control" />
+                        </div>
+
+                        <div class="form-group">
+                            <label>Disponibilidad Horaria</label>
+                            @foreach (var dia in Model.DisponibilidadesPorDia.Keys.ToList())
+                            {
+                                <div class="mb-3 border rounded p-3">
+                                    <strong>@dia</strong><br />
+                                    <div class="form-check form-switch mb-2">
+                                        <input class="form-check-input toggle-dia" type="checkbox" id="toggle-@dia" checked />
+                                        <label class="form-check-label">Disponible</label>
+                                    </div>
+
+                                    <div class="form-group" id="contenedor-@dia">
+                                        <input type="text" class="form-control horario-dia"
+                                               name="DisponibilidadesPorDia[@dia]"
+                                               id="input-@dia"
+                                               value="@Model.DisponibilidadesPorDia[dia]"
+                                               placeholder="Ej: 08:00-12:00,16:00-18:00" />
+                                        <small class="form-text text-muted">Puedes ingresar uno o más rangos. Ej: 08:00-12:00,16:00-18:00</small>
+                                    </div>
+
+                                </div>
+                            }
+                        </div>
+
+                        <div class="form-group">
+                            <label>Foto actual</label><br />
+                            @if (!string.IsNullOrEmpty(Model.FotoActual))
+                            {
+                                <img src="@Model.FotoActual" class="img-thumbnail rounded-circle" style="max-width: 120px;" />
+                            }
+                            else
+                            {
+                                <p>No hay foto.</p>
+                            }
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="NuevaFoto">Nueva foto (opcional)</label>
+                            <input asp-for="NuevaFoto" type="file" class="form-control-file" accept=".jpg,.jpeg,.png" />
+                        </div>
+                    </div>
+
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</div>
+
+@section Scripts {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="~/js/editarMedico.js"></script>
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

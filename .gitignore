@@ -1,2 +1,7 @@
-hospitalAPI/obj/
-hospitalAPI/.vs/
+clinicaApp/obj/
+clinicaApp/.vs/
+clinicaApp/bin/
+clinicaApp/Migrations/
+clinicaApp/wwwroot/images/*
+.vscode/
+*.sql

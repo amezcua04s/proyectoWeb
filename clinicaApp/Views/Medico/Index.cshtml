@@ -1,0 +1,50 @@
+﻿@model List<clinicaApp.Models.Medico>
+
+@{
+    ViewData["Title"] = "Médicos Disponibles";
+    Layout = "_Layout";
+}
+
+<div class="container mt-4">
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-12 col-md-4 mb-4">
+                <a asp-controller="Paciente" asp-action="CrearCita" asp-route-id="@item.Id" style="text-decoration: none; color: inherit;">
+                    <div class="card h-100 shadow-sm text-center p-3">
+
+                        <img src="@item.Foto"
+                             class="card-img-top rounded-circle mx-auto d-block mt-3"
+                             style="width: 150px; height: 150px; object-fit: cover;"
+                             alt="Foto de @item.User.Nombre" />
+                        <div class="card-body">
+                            <h5 class="card-title">@item.User.Nombre @item.User.Paterno @item.User.Materno</h5>
+                            <p class="card-text mb-1">
+                                <strong>Especialidades:</strong>
+                                @if (item.Especialidades != null && item.Especialidades.Any())
+                                {
+                                    @string.Join(", ", item.Especialidades)
+                                }
+                                else
+                                {
+                                    <span>No asignadas</span>
+                                }
+                            </p>
+                            <p class="card-text mb-1"><strong>Sexo:</strong> @item.User.Sexo</p>
+                            <p class="card-text"><strong>Teléfono:</strong> @item.User.Telefono</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+</div>

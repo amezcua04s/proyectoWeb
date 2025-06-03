@@ -1,0 +1,103 @@
+﻿@model clinicaApp.Models.Paciente
+
+@{
+    ViewData["Title"] = "Mi Expediente";
+    Layout = "_Layout"; // Usa tu layout principal
+}
+
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">Expediente Médico</h2>
+
+    <!-- Información general -->
+    <div class="card mb-4 shadow">
+        <div class="card-header bg-primary text-white">
+            Información General
+        </div>
+        <div class="card-body">
+            <p><strong>Nombre:</strong> @Model.User.Nombre @Model.User.Paterno @Model.User.Materno</p>
+            <p><strong>Correo:</strong> @Model.User.Email</p>
+            <p><strong>Teléfono:</strong> @Model.User.Telefono</p>
+            <p><strong>Sexo:</strong> @Model.User.Sexo</p>
+            <p><strong>Fecha de Nacimiento:</strong> @Model.Nacimiento.ToShortDateString()</p>
+            <p><strong>Edad:</strong> @(DateTime.Now.Year - Model.Nacimiento.Year) años</p>
+        </div>
+    </div>
+
+    <!-- Historial médico -->
+    <div class="row">
+        @foreach (var categoria in new[] {
+        ("Alergias", Model.Alergias),
+        ("Enfermedades", Model.Enfermedades),
+        ("Medicamentos", Model.Medicamentos),
+        ("Antecedentes", Model.Antecedentes),
+        ("Cirugías", Model.Cirugias),
+        ("Tratamientos", Model.Tratamientos)
+        })
+        {
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-secondary text-white">
+                        @categoria.Item1
+                    </div>
+                    <div class="card-body">
+                        @if (categoria.Item2 != null && categoria.Item2.Any())
+                        {
+                            <ul>
+                                @foreach (var item in categoria.Item2)
+                                {
+                                    <li>@item</li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <p class="text-muted">No registrado</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Citas médicas -->
+    <div class="card mb-5 shadow">
+        <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+            <span>Citas Médicas</span>
+            <a asp-controller="Medico" asp-action="Index" class="btn btn-secondary btn-sm">Agendar Nueva Cita</a>
+        </div>
+        <div class="card-body">
+            @if (ViewBag.Citas is List<clinicaApp.Models.Cita> citas && citas.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Hora</th>
+                                <th>Doctor</th>
+                                <th>Motivo</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var cita in citas)
+                            {
+                                <tr>
+                                    <td>@cita.FechaHora.ToShortDateString()</td>
+                                    <td>@cita.FechaHora.ToShortTimeString()</td>
+                                    <td>@cita.Medico?.User?.Nombre @cita.Medico?.User?.Paterno</td>
+                                    <td>@cita.Motivo</td>
+                                    <td>@cita.Estado</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <p class="text-muted">No tienes citas registradas.</p>
+            }
+        </div>
+    </div>
+</div>

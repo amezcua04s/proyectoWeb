@@ -1,0 +1,130 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<clinicaApp.Models.ClinicaUser> UserManager
+@inject SignInManager<clinicaApp.Models.ClinicaUser> SignInManager
+
+@{
+    var user = await UserManager.GetUserAsync(User);
+    var nombreCompleto = (user != null && user.Nombre != null && user.Materno != null)
+        ? $"{user.Nombre} {user.Materno}"
+        : "Invitado";
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - Dashboard Admin</title>
+
+    <link href="~/adminlte/plugins/fontawesome-free/css/all.min.css" rel="stylesheet" />
+    <link href="~/adminlte/dist/css/adminlte.min.css" rel="stylesheet" />
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+</head>
+<body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed">
+    <div class="wrapper">
+
+        <!-- Navbar -->
+        <nav class="main-header navbar navbar-expand-md navbar-white navbar-light">
+            <div class="container-fluid">
+                <!-- Botón de sidebar-->
+                <button class="navbar-toggler" type="button" data-widget="pushmenu" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Menú de usuario a la derecha -->
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fas fa-user"></i> @nombreCompleto
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <form asp-controller="Account" asp-action="Logout" method="post" class="dropdown-item">
+                                <button type="submit" class="btn btn-link text-dark p-0 m-0" style="text-decoration: none;">
+                                    <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+                                </button>
+                            </form>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Sidebar -->
+        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+            <a href="~/Admin" class="brand-link text-center">
+                <span class="brand-text font-weight-light">Panel Admin</span>
+            </a>
+
+            <div class="sidebar">
+
+                <nav class="mt-2">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
+
+                        <!-- Página principal -->
+                        <li class="nav-item">
+                            <a asp-controller="Home" asp-action="Index" class="nav-link">
+                                <i class="nav-icon fas fa-home"></i>
+                                <p>Página principal</p>
+                            </a>
+                        </li>
+
+                        <hr class="bg-secondary my-2" />
+
+                        <!-- Médico -->
+                        <li class="nav-item">
+                            <a asp-controller="Medico" asp-action="Create" class="nav-link">
+                                <i class="nav-icon fas fa-user-plus"></i>
+                                <p>Registrar Médico</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="Medico" asp-action="IndexAdmin" class="nav-link">
+                                <i class="nav-icon fas fa-user-md"></i>
+                                <p>Ver Médicos</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-action="IndexBaja" asp-controller="Medico">
+                                <i class="nav-icon fas fa-user-slash"></i>
+                                <p>Médicos dados de baja</p>
+                            </a>
+                        </li>
+
+                        <hr class="bg-secondary my-2" />
+
+                        <!-- Especialidades -->
+                        <li class="nav-item">
+                            <a asp-controller="Especialidad" asp-action="Create" class="nav-link">
+                                <i class="nav-icon fas fa-stethoscope"></i>
+                                <p>Registrar especialidad</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="Especialidad" asp-action="IndexAdmin" class="nav-link">
+                                <i class="nav-icon fas fa-list"></i>
+                                <p>Ver especialidades</p>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+
+
+            </div>
+        </aside>
+
+        <!-- Contenido principal -->
+        <div class="content-wrapper">
+            @RenderBody()
+        </div>
+
+    </div>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+    <!-- Scripts-->
+    <script src="~/adminlte/plugins/jquery/jquery.min.js"></script>
+    <script src="~/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/adminlte/dist/js/adminlte.min.js"></script>
+</body>
+</html>
