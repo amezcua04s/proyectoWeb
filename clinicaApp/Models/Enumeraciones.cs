@@ -20,14 +20,10 @@
     public enum EstadoCita {
 
         Pendiente = 0,
-        Confirmada = 1,
-        Completada = 2,
-        Cancelada = 3,
-        NoAsistio = 4
+        Completada = 1,
+        Cancelada = 2,
+        NoAsistio = 3
 
     }
 
-    public class Enumeraciones
-    {
-    }
 }

@@ -22,7 +22,5 @@ namespace clinicaApp.Models
         //Para la relacion con expediente
         public Expediente Expediente { get; set; }
 
-
-
     }
 }

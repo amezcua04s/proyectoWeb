@@ -19,14 +19,11 @@ namespace clinicaApp.Controllers
     public class PacienteController : Controller
     {
         private readonly ClinicaAppDbContext _context;
-        private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly UserManager<ClinicaUser> _userManager;
 
-        public PacienteController(ClinicaAppDbContext context, IWebHostEnvironment webHostEnvironment, UserManager<ClinicaUser> userManager)
-        {
+        public PacienteController(ClinicaAppDbContext context, UserManager<ClinicaUser> userManager) {
 
             _context = context;
-            _webHostEnvironment = webHostEnvironment;
             _userManager = userManager;
 
         }

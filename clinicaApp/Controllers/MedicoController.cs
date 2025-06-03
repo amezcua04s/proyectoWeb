@@ -91,7 +91,7 @@ namespace clinicaApp.Controllers
                         Materno = m.User.Materno,
                         Paterno = m.User.Paterno,
                         Sexo = m.User.Sexo,
-                        Correo = m.User.Correo,
+                        Email = m.User.Email,
                         Contrasenia = m.User.Contrasenia,
                         Telefono = m.User.Telefono
                     }
@@ -479,6 +479,20 @@ namespace clinicaApp.Controllers
 
             await _context.SaveChangesAsync();
             return RedirectToAction("VistaInicial", "Medico");
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Doctor")]
+        public async Task<IActionResult> CambiarEstadoCita(int citaId, EstadoCita nuevoEstado)
+        {
+            var cita = await _context.Citas.FindAsync(citaId);
+            if (cita == null) return NotFound();
+
+            cita.Estado = nuevoEstado;
+            await _context.SaveChangesAsync();
+
+            TempData["Success"] = "Estado de la cita actualizado correctamente.";
+            return RedirectToAction("VistaInicial");
         }
 
 

@@ -32,7 +32,6 @@ namespace clinicaApp.Models
 
         public bool EstaOcupado { get; set; } = false;
 
-        public string? TimeZoneId { get; set; }
     }
 
 }

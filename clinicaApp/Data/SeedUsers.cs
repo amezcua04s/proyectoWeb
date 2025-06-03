@@ -28,7 +28,6 @@ namespace clinicaApp.Data
                 {
                     UserName = adminEmail,
                     Email = adminEmail,
-                    Correo = adminEmail,
                     Nombre = "Admin",
                     Materno = "Principal",
                     Registro = DateTime.Now

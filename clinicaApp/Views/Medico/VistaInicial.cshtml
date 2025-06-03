@@ -74,6 +74,19 @@
                                 <button type="submit" class="btn btn-sm btn-success mt-1">Actualizar</button>
                             </form>
                         </td>
+                        <td>
+                            <form method="post" asp-action="CambiarEstadoCita" asp-controller="Medico">
+                                <input type="hidden" name="citaId" value="@cita.Id" />
+                                                        <select name="nuevoEstado" class="form-select form-select-sm mb-2">
+                                                            @foreach (EstadoCita estado in Enum.GetValues(typeof(EstadoCita)))
+                                                            {
+                                                                var selected = (estado == cita.Estado) ? "selected" : "";
+                                                                @Html.Raw($"<option value='{(int)estado}' {selected}>{estado}</option>")
+                                                            }
+                                                        </select>
+                                <button type="submit" class="btn btn-sm btn-secondary">Cambiar estado</button>
+                            </form>
+                        </td>
                     </tr>
                 }
             </tbody>
