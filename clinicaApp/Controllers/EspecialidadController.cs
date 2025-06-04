@@ -22,6 +22,7 @@ namespace clinicaApp.Controllers
         private readonly ClinicaAppDbContext _context;
         private readonly IWebHostEnvironment _env;
         private readonly UserManager<ClinicaUser> _userManager;
+        private readonly List<string> especialidadesExistentes;
 
         public EspecialidadController(ClinicaAppDbContext context, IWebHostEnvironment env, UserManager<ClinicaUser> userManager) {
 
@@ -30,7 +31,6 @@ namespace clinicaApp.Controllers
             _userManager = userManager;
         
         }
-        //Vista donde se verán todas las especialidades y el usuario poodrá buscar medico segun la especialidad que quiewra
         public async Task<IActionResult> Index() {
             var especialidades = await _context.Especialidades.ToListAsync();
             return View(especialidades);
@@ -67,25 +67,31 @@ namespace clinicaApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                foreach (var kvp in ModelState)
-                {
-                    foreach (var error in kvp.Value.Errors)
-                    {
-                        Console.WriteLine($"Campo: {kvp.Key}, Error: {error.ErrorMessage}");
-                    }
-                }
+                model.Especialidades = await _context.Especialidades
+                    .Select(e => e.Nombre)
+                    .ToListAsync();
 
-                model.Especialidades = _context.Especialidades
-                    .Select(e => e.Nombre.ToLower())
-                    .ToList();
+                return View(model);
+            }
+
+            // Validar que no exista una especialidad con el mismo nombre (ignorando mayúsculas/minúsculas)
+            var existe = await _context.Especialidades
+                .AnyAsync(e => e.Nombre.ToLower() == model.Nombre.Trim().ToLower());
+
+            if (existe)
+            {
+                ModelState.AddModelError("Nombre", "Ya existe una especialidad con ese nombre.");
+                model.Especialidades = await _context.Especialidades
+                    .Select(e => e.Nombre)
+                    .ToListAsync();
 
                 return View(model);
             }
 
             var especialidad = new Especialidad
             {
-                Nombre = model.Nombre,
-                Descripcion = model.Descripcion
+                Nombre = model.Nombre.Trim(),
+                Descripcion = model.Descripcion?.Trim()
             };
 
             _context.Add(especialidad);
@@ -93,6 +99,7 @@ namespace clinicaApp.Controllers
 
             return RedirectToAction(nameof(IndexAdmin));
         }
+
 
         [Authorize(Roles = "Administrador")]
         [HttpGet]

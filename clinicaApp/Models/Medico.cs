@@ -20,7 +20,6 @@ namespace clinicaApp.Models {
         //relacion con las citas
         public ICollection<Cita> Citas { get; set; } = new List<Cita>();
 
-
     }
 
 }

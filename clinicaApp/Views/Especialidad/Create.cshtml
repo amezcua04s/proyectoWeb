@@ -12,9 +12,16 @@
         </div>
     </section>
 
-<section class="content">
-    <div class="container-fluid">
+
         <div class="row justify-content-center">
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
             <div class="col-lg-6 col-md-8 col-sm-12">
                 <div class="card card-primary shadow rounded">
                     <div class="card-header bg-primary text-white rounded-top">
@@ -56,8 +63,7 @@
                 </div>
             </div>
         </div>
-    </div>
-</section>
+
 
 
 @section Scripts {
